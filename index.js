@@ -1,11 +1,11 @@
 'use strict'
 
 const {resolve} = require('path')
-    , chalk = require('chalk')
-    , pkg = require('./package.json')
-    , debug = require('debug')(`${pkg.name}:boot`)
+  , chalk = require('chalk')
+  , pkg = require('./package.json')
+  , debug = require('debug')(`${pkg.name}:boot`)
 
-    , nameError =
+  , nameError =
 `*******************************************************************
  You need to give your app a proper name.
 
@@ -33,7 +33,7 @@ if (!reasonableName.test(pkg.name)) {
 // and add it to the environment.
 // Note that this needs to be in your home directory, not the project's root directory
 const env = process.env
-    , secretsFile = resolve(require('homedir')(), `.${pkg.name}.env`)
+  , secretsFile = resolve(require('homedir')(), `.${pkg.name}.env`)
 
 try {
   Object.assign(env, require(secretsFile))

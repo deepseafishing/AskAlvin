@@ -29,7 +29,11 @@
         "type": "git",
         "url": "git+https://github.com/queerviolet/bones.git"
     },
-    "keywords": ["react", "redux", "skeleton"],
+    "keywords": [
+        "react",
+        "redux",
+        "skeleton"
+    ],
     "author": "Ashi Krishnan <me@ashi.works>",
     "license": "MIT",
     "bugs": {

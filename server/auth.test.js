@@ -28,14 +28,14 @@ describe('/api/auth', () => {
         .expect(302)
         .expect('Set-Cookie', /session=.*/)
         .expect('Location', '/')
-      )
+    )
 
     it('fails with an invalid username and password', () =>
       request(app)
         .post('/api/auth/login/local')
         .send({username: alice.username, password: 'wrong'})
         .expect(401)
-      )
+    )
   })
 
   describe('GET /whoami', () => {

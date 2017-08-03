@@ -1,86 +1,25 @@
-# Hi, I'm bones
+# Ask Alvin
+Inspired by Alvin and his incredible abilities for recommending great places to eat around New York City,
+Stanley and I decided to work on this project during the 4 day.
 
-I'm a happy little skeleton. You can clone me to use as a starter on your projects!
-I have React, Redux, Sequelize, and Express all just rattling around in here ready
-to go.
+### These are what I want to yeild from doing this project.
 
-## I need node >= 6.7.0
+- [ ] Get the Best Pizza, Hamburger, Icecream, Taco, Pho, Bar Places in New York City.
+- [ ] Never stop and stand on the streets looking at your phone and Yelp for endless time.
+- [ ] Better Social Time with people in FullStack Academy.
+- [ ] Better Lunch at FullStack Academy.
+- [ ] Better MealPal experience
+- [ ] Help the following Cohort people who are new in town.
 
-If you don't have it, I'll complain and tell you how to install it.
+### User Experience
+-
 
-## 1. Make me into something!
 
-We recommend that you **clone**, not fork, this repo – unless your intention is
-to develop Bones proper instead of using Bones as the starting point for your
-own application.
+### These are features I think will make this project a little bit greater.
 
-Start by doing either of the following:
+- [ ] Only Fullstack people can get into this website because I believe these people will recommend truly tasty places.
+- [ ] Voting System or Battle System.
+- [ ] Get track of recommendations by each person.
+- [ ] List people who recommended and restaurants by that person.
+- [ ] The recommenders and message should pop up over the google map.
 
-* Create a GitHub repo and clone it, or
-* `git init` in an empty directory on your machine.
-
-After you have a repo on your machine:
-
-```sh
-git remote add bones https://github.com/1706-FSA-NY/bones.git
-git fetch bones
-git merge bones/master
-```
-
-And then you'll have me! If I change – which I probably will – you can get the most recent
-version by doing this again:
-
-```sh
-git fetch bones
-git merge bones/master
-```
-
-## 2. I need a name.
-
-I don't have a name. I think I used to have one, but it turned to dust right along with my
-heart and liver and pituitary gland and all that stuff.
-
-Anyway, I'll need one. Give me a name in `package.json`.
-
-## 3. Start my dusty heart
-
-Short and sweet:
-
-```sh
-npm install
-npm run dev
-```
-
-The `dev` script sets `NODE_ENV` to "development", runs the build script in watch mode, and
-starts the server with `nodemon`. Build vs server logs are separated by a prefix. If you prefer
-to run the server and build processes separately, you can instead do:
-
-```sh
-npm run start-dev
-```
-
-```sh
-npm run build-dev
-```
-
-In two separate terminals. The vanilla `npm start` is for production — you won't use it in development!
-
-## My anatomy
-
-`/app` has the React/Redux setup. `main.jsx` is the entry point.
-
-`/db` has the Sequelize models and database setup. It'll create the database for you if it doesn't exist,
-assuming you're using postgres.
-
-`/server` has the Express server and routes. `start.js` is the entry point.
-
-`/bin` has scripts. (Right now it has *one* script that creates a useful symlink.)
-
-## Conventions
-
-I use `require` and `module.exports` in `.js` files.
-
-I use `import` and `export` in `.jsx` files, unless `require` makes for cleaner code.
-
-I use two spaces, no semi-colons, and trailing commas where possible. I'll
-have a linter someday soon.

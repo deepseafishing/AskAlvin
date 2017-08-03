@@ -8,39 +8,44 @@
 import 'babel-polyfill'
 
 import React from 'react'
-import {render} from 'react-dom'
-import {Provider, connect} from 'react-redux'
-import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
+import { render } from 'react-dom'
+import { Provider, connect } from 'react-redux'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from 'react-router-dom'
 
 import store from './store'
 import Jokes from './components/Jokes'
-import Login from './components/Login'
-import WhoAmI from './components/WhoAmI'
 import NotFound from './components/NotFound'
+import NavBar from './components/NavBar'
+import SignUpContainer from './components/SignUpContainer'
+import Home from './components/Home'
+import LoginContainer from './components/LoginContainer'
 
-const ExampleApp = connect(
-  ({ auth }) => ({ user: auth })
-)(
-  ({ user, children }) =>
+const ExampleApp = connect(({ auth }) => ({
+  user: auth
+}))(({ user, children }) =>
+  <Router>
     <div>
-      <nav>
-        {user ? <WhoAmI/> : <Login/>}
-      </nav>
+      <NavBar />
       <main>
         <Switch>
-          <Route path="/jokes" component={Jokes} />
-          <Redirect exact from="/" to="/jokes" />
+          <Route exact path="/" component={Home} />
+          <Route path="/login" component={LoginContainer} />
+          <Route path="/signup" component={SignUpContainer} />
           <Route component={NotFound} />
         </Switch>
       </main>
     </div>
+  </Router>
 )
 
 render(
   <Provider store={store}>
-    <Router>
-      <ExampleApp />
-    </Router>
+    <ExampleApp />
   </Provider>,
   document.getElementById('main')
 )

@@ -1,0 +1,24 @@
+body {
+  margin: 24px;
+}
+.hiddentotal {
+  opacity: 0.0;
+  display: none;
+}
+
+.materialboxed.initialized {
+  margin: 5% auto;
+}
+
+.spinning {
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  from {
+    transform: scale(1) rotate(0deb);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}

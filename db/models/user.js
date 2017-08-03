@@ -3,21 +3,35 @@
 // bcrypt docs: https://www.npmjs.com/package/bcrypt
 const bcrypt = require('bcryptjs'),
   {
+    BOOLEAN,
     STRING,
     INTEGER,
     VIRTUAL
   } = require('sequelize')
 
 module.exports = db => db.define('users', {
-  name: STRING,
+  first_name: STRING,
+  last_name: STRING,
   email: {
     type: STRING,
+    notNull: true,
     validate: {
       isEmail: true,
       notEmpty: true,
     }
   },
-  level: INTEGER,
+  level: {
+    type: INTEGER,
+    defaultValue: 1
+  },
+  experience: {
+    type: INTEGER,
+    defaultValue: 0
+  },
+  isAdmin: {
+    type: BOOLEAN,
+    defaultValue: false
+  },
 
   // We support oauth, so users may or may not have passwords.
   password_digest: STRING, // This column stores the hashed password in the DB, via the beforeCreate/beforeUpdate hooks
@@ -36,24 +50,38 @@ module.exports = db => db.define('users', {
       exclude: ['password_digest']
     }
   },
+  getterMethods: {
+    full_name() {
+      return this.first_name + ' ' + this.last_name
+    }
+  },
   instanceMethods: {
     // This method is a Promisified bcrypt.compare
     authenticate(plaintext) {
       return bcrypt.compare(plaintext, this.password_digest)
+    },
+    // increase user's exp using this instance method!
+    exp_gain(pts) {
+      this.exp = this.exp + pts
+      console.log('exp: ', this.exp)
     }
   }
 })
 
 module.exports.associations = (User, {
   OAuth,
-  Thing,
-  Favorite
+  Restaurant,
+  RestaurantUser,
+  Review
 }) => {
   User.hasOne(OAuth)
-  User.belongsToMany(Thing, {
-    as: 'favorites',
-    through: Favorite
+  User.belongsToMany(Restaurant, {
+    through: RestaurantUser
   })
+  User.belongsToMany(Review, {
+    through: RestaurantUser
+  })
+  User.hasMany(RestaurantUser)
 }
 
 function setEmailAndPassword(user) {

@@ -1,20 +1,28 @@
 'use strict'
 
-// bcrypt docs: https://www.npmjs.com/package/bcrypt
 const {
   STRING,
-  INTEGER,
-  VIRTUAL
+  ARRAY,
+  DOUBLE
 } = require('sequelize')
 
 module.exports = db => db.define('restaurants', {
   name: STRING,
-  vote_number: INTEGER,
-  defaultScope: {},
+  address: STRING,
+  // inside of the json is going to be lat: some #, long: some #
+  location: ARRAY(DOUBLE)
 })
 
 module.exports.associations = (Restaurant, {
-  User
+  User,
+  RestaurantUser,
+  Review
 }) => {
-  Restaurant.belongsTo(User)
+  Restaurant.belongsToMany(User, {
+    through: RestaurantUser
+  })
+  Restaurant.belongsToMany(Review, {
+    through: RestaurantUser
+  })
+  Restaurant.hasMany(RestaurantUser)
 }

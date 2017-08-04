@@ -1198,6 +1198,10 @@ camelcase@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-3.0.0.tgz#32fc4b9fcdaf845fcdf7e73bb97cac2261f0ab0a"
 
+can-use-dom@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/can-use-dom/-/can-use-dom-0.1.0.tgz#22cc4a34a0abc43950f42c6411024a3f6366b45a"
+
 caniuse-api@^1.5.2:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/caniuse-api/-/caniuse-api-1.6.1.tgz#b534e7c734c4f81ec5fbe8aca2ad24354b962c6c"
@@ -1591,7 +1595,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2:
     create-hash "^1.1.0"
     inherits "^2.0.1"
 
-create-react-class@^15.6.0:
+create-react-class@^15.5.2, create-react-class@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.0.tgz#ab448497c26566e1e29413e883207d57cfe7bed4"
   dependencies:
@@ -2708,12 +2712,9 @@ good-listener@^1.2.2:
   dependencies:
     delegate "^3.1.2"
 
-google-maps-react@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/google-maps-react/-/google-maps-react-1.1.0.tgz#eb5b36083fb32fa605ec63edb46bfb92c6fbe184"
-  dependencies:
-    history "^3.0.0"
-    invariant "^2.2.1"
+google-maps-infobox@^1.1.13:
+  version "1.1.15"
+  resolved "https://registry.yarnpkg.com/google-maps-infobox/-/google-maps-infobox-1.1.15.tgz#22a28a97cf72a2cd8493eef755c71fc1a2995170"
 
 got@^3.2.0:
   version "3.3.1"
@@ -2795,15 +2796,6 @@ hawk@~3.1.3:
     cryptiles "2.x.x"
     hoek "2.x.x"
     sntp "1.x.x"
-
-history@^3.0.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/history/-/history-3.3.0.tgz#fcedcce8f12975371545d735461033579a6dae9c"
-  dependencies:
-    invariant "^2.2.1"
-    loose-envify "^1.2.0"
-    query-string "^4.2.2"
-    warning "^3.0.0"
 
 history@^4.5.1, history@^4.6.0:
   version "4.6.3"
@@ -3543,7 +3535,7 @@ lodash@4.12.0:
   version "4.12.0"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.12.0.tgz#2bd6dc46a040f59e686c972ed21d93dc59053258"
 
-lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.17.2, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.1:
+lodash@^4.0.0, lodash@^4.13.1, lodash@^4.14.0, lodash@^4.16.2, lodash@^4.17.2, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.1:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -3591,6 +3583,10 @@ magic-string@^0.14.0:
 map-stream@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/map-stream/-/map-stream-0.1.0.tgz#e56aa94c4c8055a16404a0674b78f215f7c8e194"
+
+marker-clusterer-plus@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/marker-clusterer-plus/-/marker-clusterer-plus-2.1.4.tgz#f8eff74d599dab3b7d0e3fed5264ea0e704f5d67"
 
 materialize-social@^1.0.0:
   version "1.0.0"
@@ -4599,7 +4595,7 @@ qs@~6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.3.0.tgz#f403b264f23bc01228c74131b407f18d5ea5d442"
 
-query-string@^4.1.0, query-string@^4.2.2:
+query-string@^4.1.0:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-4.3.4.tgz#bbb693b9ca915c232515b228b1a02b609043dbeb"
   dependencies:
@@ -4653,6 +4649,10 @@ rc@^1.0.1, rc@~1.1.6:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
 
+react-display-name@^0.2.0:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/react-display-name/-/react-display-name-0.2.3.tgz#f50204d430c9ca819bc0bade0306e9175d8d1987"
+
 react-dom@^15.3.2:
   version "15.4.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.4.2.tgz#015363f05b0a1fd52ae9efdd3a0060d90695208f"
@@ -4682,6 +4682,23 @@ react-element-to-jsx-string@^3.0.0:
     stringify-object "^2.3.1"
     traverse "^0.6.6"
 
+react-google-maps@^7.2.0:
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/react-google-maps/-/react-google-maps-7.2.0.tgz#a3347c908aa26d5635023603f2746c0bc70203c5"
+  dependencies:
+    babel-runtime "^6.11.6"
+    can-use-dom "^0.1.0"
+    create-react-class "^15.5.2"
+    google-maps-infobox "^1.1.13"
+    invariant "^2.2.1"
+    lodash "^4.16.2"
+    marker-clusterer-plus "^2.1.4"
+    prop-types "^15.5.8"
+    react-display-name "^0.2.0"
+    react-prop-types-element-of-type "^2.2.0"
+    scriptjs "^2.5.8"
+    warning "^3.0.0"
+
 react-live@^1.5.2:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/react-live/-/react-live-1.7.0.tgz#014ae5cce62fe8262a4b116be4820119653af9f7"
@@ -4701,6 +4718,10 @@ react-materialize@^1.0.6:
     react "^15.4.2"
     react-dom "^15.4.2"
     react-live "^1.5.2"
+
+react-prop-types-element-of-type@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-prop-types-element-of-type/-/react-prop-types-element-of-type-2.2.0.tgz#bcc332d3903c2259cf68c28a81c4a663faba59ac"
 
 react-rating@^0.8.1:
   version "0.8.1"
@@ -5072,6 +5093,10 @@ schema-utils@^0.3.0:
   resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-0.3.0.tgz#f5877222ce3e931edae039f17eb3716e7137f8cf"
   dependencies:
     ajv "^5.0.0"
+
+scriptjs@^2.5.8:
+  version "2.5.8"
+  resolved "https://registry.yarnpkg.com/scriptjs/-/scriptjs-2.5.8.tgz#d0c43955c2e6bad33b6e4edf7b53b8965aa7ca5f"
 
 select@^1.1.2:
   version "1.1.2"

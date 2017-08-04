@@ -1,11 +1,12 @@
 /* global google */
 import { default as React, Component } from 'react'
 
-import { withGoogleMap, GoogleMap } from 'react-google-maps'
+import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 
 import SearchBox from 'APP/node_modules/react-google-maps/lib/places/SearchBox'
 
 const INPUT_STYLE = {
+  backgroundColor: `white`,
   boxSizing: `border-box`,
   MozBoxSizing: `border-box`,
   border: `1px solid transparent`,
@@ -78,7 +79,7 @@ export default class SearchBoxExample extends Component {
 
   handlePlacesChanged() {
     const places = this._searchBox.getPlaces()
-
+    console.log(places)
     // Add a marker for each place returned from search bar
     const markers = places.map(place => ({
       position: place.geometry.location

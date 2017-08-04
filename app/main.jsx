@@ -24,6 +24,7 @@ import NavBar from './components/NavBar'
 import SignUpContainer from './components/SignUpContainer'
 import Home from './components/Home'
 import LoginContainer from './components/LoginContainer'
+import SearchBoxExample from './components/SearchBoxExample.jsx'
 
 const ExampleApp = connect(({ auth }) => ({
   user: auth
@@ -33,7 +34,7 @@ const ExampleApp = connect(({ auth }) => ({
       <NavBar />
       <main>
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact path="/" component={SearchBoxExample} />
           <Route path="/login" component={LoginContainer} />
           <Route path="/signup" component={SignUpContainer} />
           <Route component={NotFound} />

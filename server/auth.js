@@ -5,6 +5,7 @@ const passport = require('passport')
 
 const { User, OAuth } = require('APP/db')
 const auth = require('express').Router()
+const axios = require('axios')
 
 if (process.env.NODE_ENV !== 'production') require('../secret')
 
@@ -98,29 +99,39 @@ passport.deserializeUser((id, done) => {
 passport.use(
   new (require('passport-local')).Strategy((email, password, done) => {
     debug('will authenticate user(email: "%s")', email)
-    User.findOne({
-      where: { email },
-      attributes: { include: ['password_digest'] }
-    })
-      .then(user => {
-        if (!user) {
-          debug('authenticate user(email: "%s") did fail: no such user', email)
-          return done(null, false, { message: 'Login incorrect' })
-        }
-        return user.authenticate(password).then(ok => {
-          if (!ok) {
-            debug('authenticate user(email: "%s") did fail: bad password')
-            return done(null, false, { message: 'Login incorrect' })
-          }
-          debug(
-            'authenticate user(email: "%s") did ok: user.id=%d',
-            email,
-            user.id
-          )
-          done(null, user)
-        })
+    axios
+      .post('https://learn.fullstackacademy.com/auth/local', {
+        email,
+        password
+      })
+      .then(res => res.data)
+      .then(res => {
+        console.log(res)
       })
       .catch(done)
+    // User.findOne({
+    //   where: { email },
+    //   attributes: { include: ['password_digest'] }
+    // })
+    //   .then(user => {
+    //     if (!user) {
+    //       debug('authenticate user(email: "%s") did fail: no such user', email)
+    //       return done(null, false, { message: 'Login incorrect' })
+    //     }
+    //     return user.authenticate(password).then(ok => {
+    //       if (!ok) {
+    //         debug('authenticate user(email: "%s") did fail: bad password')
+    //         return done(null, false, { message: 'Login incorrect' })
+    //       }
+    //       debug(
+    //         'authenticate user(email: "%s") did ok: user.id=%d',
+    //         email,
+    //         user.id
+    //       )
+    //       done(null, user)
+    //     })
+    //   })
+    //   .catch(done)
   })
 )
 

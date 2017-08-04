@@ -1,0 +1,23 @@
+nav {
+  background-color: white;
+}
+
+.nav-wrapper {
+  width: 70%;
+  margin: 0 auto;
+}
+
+nav .nav-wrapper a {
+  color: #0000ff;
+}
+
+.brand-logo {
+  display: inline-block;
+  width: 200px;
+  height: 64px;
+}
+.brand-jpeg {
+  width: 100%;
+  vertical-align: middle;
+}
+

@@ -35,7 +35,6 @@ const ExampleApp = connect(({ auth }) => ({
         <Switch>
           <Route exact exact path="/" component={SimpleMapExample} />
           <Route path="/login" component={LoginContainer} />
-          <Route path="/signup" component={SignUpContainer} />
           <Route component={NotFound} />
         </Switch>
       </main>

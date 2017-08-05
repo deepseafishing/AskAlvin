@@ -22,9 +22,6 @@ class NavBar extends React.Component {
     return [
       <li key={1} className={this.validateActive('/login') ? 'active' : ''}>
         <NavLink to="/login">Login</NavLink>
-      </li>,
-      <li key={2} className={this.validateActive('/signup') ? 'active' : ''}>
-        <NavLink to="/signup">Sign up</NavLink>
       </li>
     ]
   }
@@ -36,7 +33,22 @@ class NavBar extends React.Component {
       </li>,
       <NavItem key={2} onClick={this.props.logout}>
         Logout
-      </NavItem>
+      </NavItem>,
+      <Dropdown
+        trigger={
+          <li>
+            <NavLink to="#!">
+              <img
+                key={3}
+                src={this.props.user.photo}
+                alt=""
+                className="profile-photo circle responsive-img"
+              />
+              <i className="material-icons right">arrow_drop_down</i>
+            </NavLink>
+          </li>
+        }
+      />
     ]
   }
 

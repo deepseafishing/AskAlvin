@@ -5,6 +5,7 @@ const passport = require('passport')
 
 const { User, OAuth } = require('APP/db')
 const auth = require('express').Router()
+const axios = require('axios')
 
 if (process.env.NODE_ENV !== 'production') require('../secret')
 
@@ -96,56 +97,74 @@ passport.deserializeUser((id, done) => {
 
 // require.('passport-local').Strategy => a function we can use as a constructor, that takes in a callback
 passport.use(
-  new (require('passport-local')).Strategy((email, password, done) => {
+  new (require('passport-local')).Strategy(async (email, password, done) => {
     debug('will authenticate user(email: "%s")', email)
-    User.findOne({
-      where: { email },
-      attributes: { include: ['password_digest'] }
-    })
-      .then(user => {
-        if (!user) {
-          debug('authenticate user(email: "%s") did fail: no such user', email)
-          return done(null, false, { message: 'Login incorrect' })
+    try {
+      const tokenRes = await axios.post(
+        'https://learn.fullstackacademy.com/auth/local',
+        {
+          email,
+          password
         }
-        return user.authenticate(password).then(ok => {
-          if (!ok) {
-            debug('authenticate user(email: "%s") did fail: bad password')
-            return done(null, false, { message: 'Login incorrect' })
-          }
-          debug(
-            'authenticate user(email: "%s") did ok: user.id=%d',
-            email,
-            user.id
-          )
+      )
+      const token = tokenRes.data.token
+      const user = await axios.request({
+        url: 'https://learn.fullstackacademy.com/api/users/me',
+        method: 'get',
+        headers: {
+          Cookie: `token=${token};`
+        }
+      })
+      const cohort = await axios.request({
+        url: `https://learn.fullstackacademy.com/api/cohorts/${user.data
+          .cohort}`,
+        method: 'get',
+        headers: {
+          Cookie: `token=${token};`
+        }
+      })
+
+      User.findOrCreate({
+        where: { email: user.data.email },
+        defaults: {
+          // if the user doesn't exist, create including this info
+          password: password,
+          name: user.data.fullName,
+          photo: `https://s3.amazonaws.com/learndotresources/${user.data
+            .photo_url}`,
+          cohort: cohort.data.name
+        }
+      })
+        .spread((user, created) => {
           done(null, user)
         })
-      })
-      .catch(done)
+        .catch(done)
+    } catch (done) {}
   })
 )
 
 auth.get('/whoami', (req, res) => res.send(req.user))
 
-auth.post('/signup/local', (req, res, next) => {
-  User.findOrCreate({
-    where: {
-      email: req.body.email
-    },
-    defaults: {
-      name: req.body.name,
-      password: req.body.password
-    }
-  }).then(([user, created]) => {
-    if (created) {
-      req.logIn(user, err => {
-        if (err) return next(err)
-        res.json(user)
-      })
-    } else {
-      res.sendStatus(401)
-    }
-  })
-})
+// auth.post('/signup/local', (req, res, next) => {
+//   User.findOrCreate({
+//     where: {
+//       email: req.body.email
+//     },
+//     defaults: {
+//       name: req.body.name,
+//       password: req.body.password
+//     }
+//   }).then(([user, created]) => {
+//     if (created) {
+//       req.logIn(user, err => {
+//         if (err) return next(err)
+//         res.json(user)
+//       })
+//     } else {
+//       res.sendStatus(401)
+//     }
+//   })
+// })
 
 // POST requests for local login:
 auth.post(
@@ -155,14 +174,16 @@ auth.post(
 
 // GET requests for OAuth login:
 // Register this route as a callback URL with OAuth provider
-auth.get('/login/:strategy', (req, res, next) => passport.authenticate(req.params.strategy, {
-  scope: 'email', // You may want to ask for additional OAuth scopes. These are
-  // provider specific, and let you access additional data (like
-  // their friends or email), or perform actions on their behalf.
-  successRedirect: '/',
+auth.get('/login/:strategy', (req, res, next) =>
+  passport.authenticate(req.params.strategy, {
+    scope: 'email', // You may want to ask for additional OAuth scopes. These are
+    // provider specific, and let you access additional data (like
+    // their friends or email), or perform actions on their behalf.
+    successRedirect: '/'
 
-  // Specify other config here
-})(req, res, next))
+    // Specify other config here
+  })(req, res, next)
+)
 
 auth.post('/logout', (req, res) => {
   req.logout()

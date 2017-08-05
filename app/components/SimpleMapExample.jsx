@@ -3,7 +3,9 @@ import {
   default as React,
   Component
 } from 'react'
-import {connect} from 'react-redux'
+import {
+  connect
+} from 'react-redux'
 import {
   withGoogleMap,
   GoogleMap,
@@ -36,23 +38,26 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
     center={props.center}
     onBoundsChanged={props.onBoundsChanged}
   >
-    <SearchBox
-      ref={props.onSearchBoxMounted}
-      bounds={props.bounds}
-      controlPosition={google.maps.ControlPosition.TOP_LEFT}
-      onPlacesChanged={props.onPlacesChanged}
-      inputPlaceholder="Customized your placeholder"
-      inputStyle={INPUT_STYLE}
-    />
-    {props.markers.map((marker, index) =>
-      <Marker position={marker.position} key={index} onClick={() => props.onMarkerClicker(marker) } >
-        {marker.showInfo && (
-          <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
-            <div>{marker.infoContent}</div>
-          </InfoWindow>
+    <div>
+      <form>
+        <SearchBox
+          ref={props.onSearchBoxMounted}
+          bounds={props.bounds}
+          controlPosition={google.maps.ControlPosition.TOP_LEFT}
+          onPlacesChanged={props.onPlacesChanged}
+          inputPlaceholder="Search NYC Restaurants"
+          inputStyle={INPUT_STYLE}
+        />
+        {props.markers.map((marker, index) => <Marker position={marker.position} key={index} onClick={() => props.onMarkerClicker(marker) } >
+          {marker.showInfo && (
+            <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
+              <div>{marker.infoContent}</div>
+            </InfoWindow>
+          )}
+        </Marker>
         )}
-      </Marker>
-    )}
+      </form>
+    </div>
   </GoogleMap>
 )
 
@@ -71,29 +76,22 @@ class SearchBoxExample extends Component {
    markers: []
  }
 
- handleMapMounted = this.handleMapMounted.bind(this)
- handleBoundsChanged = this.handleBoundsChanged.bind(this)
- handleSearchBoxMounted = this.handleSearchBoxMounted.bind(this)
- handlePlacesChanged = this.handlePlacesChanged.bind(this)
- handleMarkerClicker = this.handleMarkerClicker.bind(this)
- handleMarkerClose = this.handleMarkerClose.bind(this)
-
- handleMapMounted(map) {
+ handleMapMounted = map => {
    this._map = map
  }
 
- handleBoundsChanged() {
+ handleBoundsChanged = () => {
    this.setState({
      bounds: this._map.getBounds(),
      center: this._map.getCenter()
    })
  }
 
- handleSearchBoxMounted(searchBox) {
+ handleSearchBoxMounted = searchBox => {
    this._searchBox = searchBox
  }
 
- handlePlacesChanged() {
+ handlePlacesChanged = () => {
    const places = this._searchBox.getPlaces()
    console.log('user:', this.props.currentUser)
    console.log(places)
@@ -106,7 +104,6 @@ class SearchBoxExample extends Component {
       <div key={2}>Address: {places[0].formatted_address}</div>,
       <div key={3}>Phone: {places[0].formatted_phone_number||places[0].international_phone_number}</div>,
       <div key={4}>Website: {places[0].website}</div>
-
     ]),
      showInfo: false
    }))
@@ -122,49 +119,42 @@ class SearchBoxExample extends Component {
    // axios.
  }
 
- handleMarkerClicker(targetMarker) {
+ handleMarkerClicker = targetMarker => {
    console.log('here')
    console.log('marker: ', targetMarker)
-   if (targetMarker.showInfo) {
-     this.setState({
-       markers: this.state.markers.map(marker => {
-         if (marker === targetMarker) {
-           return {
-             ...marker,
-             showInfo: false,
-           }
-         }
-         return marker
-       }),
-     })
-   } else {
-     this.setState({
-       markers: this.state.markers.map(marker => {
-         if (marker === targetMarker) {
-           return {
-             ...marker,
-             showInfo: true,
-           }
-         }
-         return marker
-       }),
-     })
-   }
- }
-
- handleMarkerClose(targetMarker) {
+   let setInfo
+   if (targetMarker.showInfo) setInfo = false
+   else setInfo = true
    this.setState({
      markers: this.state.markers.map(marker => {
-       if (marker !== targetMarker) return marker
-       // if (marker === targetMarker) {
-       // return {
-       // ...marker,
-       // showInfo: false,
-       // }
-       // }
-       // return marker
+       if (marker === targetMarker) {
+         return {
+           ...marker,
+           showInfo: setInfo,
+         }
+       }
+       return marker
      }),
    })
+ }
+
+ handleMarkerClose = targetMarker => {
+   console.log('targetMarker: ', targetMarker)
+   // this.setState({
+   // markers: this.state.markers.map(marker => {
+   // if (marker !== targetMarker) {
+   // return marker
+   /// / if (marker === targetMarker) {
+   // return {
+   // ...marker,
+   // showInfo: false,
+   // }
+   // }
+   // return marker
+   // }
+   // })
+   // })
+   console.log('breaking: ', this.state.markers)
  }
 
  render() {

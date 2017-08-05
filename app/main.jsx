@@ -29,16 +29,14 @@ const ExampleApp = connect(({ auth }) => ({
   user: auth
 }))(({ user, children }) =>
   <Router>
-    <div>
+    <main>
       <NavBar />
-      <main>
-        <Switch>
-          <Route exact exact path="/" component={SimpleMapExample} />
-          <Route path="/login" component={LoginContainer} />
-          <Route component={NotFound} />
-        </Switch>
-      </main>
-    </div>
+      <Switch>
+        <Route exact exact path="/" component={SimpleMapExample} />
+        <Route path="/login" component={LoginContainer} />
+        <Route component={NotFound} />
+      </Switch>
+    </main>
   </Router>
 )
 

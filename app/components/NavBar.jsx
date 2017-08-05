@@ -42,7 +42,7 @@ class NavBar extends React.Component {
                 key={3}
                 src={this.props.user.photo}
                 alt=""
-                className="profile-photo circle responsive-img"
+                className="profile-photo circle"
               />
               <i className="material-icons right">arrow_drop_down</i>
             </NavLink>

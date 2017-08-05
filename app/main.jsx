@@ -22,7 +22,7 @@ import Jokes from './components/Jokes'
 import NotFound from './components/NotFound'
 import NavBar from './components/NavBar'
 import SignUpContainer from './components/SignUpContainer'
-import Home from './components/Home'
+import SimpleMapExample from './components/SimpleMapExample'
 import LoginContainer from './components/LoginContainer'
 
 const ExampleApp = connect(({ auth }) => ({
@@ -33,7 +33,7 @@ const ExampleApp = connect(({ auth }) => ({
       <NavBar />
       <main>
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Route exact exact path="/" component={SimpleMapExample} />
           <Route path="/login" component={LoginContainer} />
           <Route path="/signup" component={SignUpContainer} />
           <Route component={NotFound} />

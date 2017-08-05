@@ -1,7 +1,12 @@
-import { combineReducers } from 'redux'
+import {
+  combineReducers
+} from 'redux'
+import users from './user.jsx'
+import restaurants from './restaurant.jsx'
+import auth from './auth.jsx'
 
-const rootReducer = combineReducers({
-  auth: require('./auth').default,
+export default combineReducers({
+  auth,
+  users,
+  restaurants
 })
-
-export default rootReducer

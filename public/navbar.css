@@ -1,9 +1,11 @@
 nav {
   background-color: white;
+  width: 85%;
+  margin: 0 auto;
 }
 
 .nav-wrapper {
-  width: 70%;
+  width: 90%;
   margin: 0 auto;
 }
 

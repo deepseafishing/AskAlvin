@@ -50,6 +50,7 @@ const RecommendationMapConst = withGoogleMap(props =>
             position={marker.position}
             key={index}
             onClick={() => props.onMarkerClicker(marker)}
+            icon={marker.color}
           >
             {marker.showInfo &&
               <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
@@ -92,6 +93,7 @@ class RecommendationMap extends Component {
            lng: el.restaurant.position[1]
          },
          showInfo: false,
+         color: this.props.currentUser.id===el.restaurant.users[0].restaurantUsers.user_id ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
          infoContent: [
            <div key = {0}>
              <b>Information</b>

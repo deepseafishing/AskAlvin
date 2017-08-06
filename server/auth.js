@@ -138,8 +138,13 @@ passport.use(
         .spread((user, created) => {
           done(null, user)
         })
-        .catch(done)
-    } catch (done) {}
+        .catch(err => {
+          throw err
+        })
+    } catch (err) {
+      debug('akldfjlakfjklasjfasdlkf', err)
+      done(err)
+    }
   })
 )
 
@@ -169,7 +174,9 @@ auth.get('/whoami', (req, res) => res.send(req.user))
 // POST requests for local login:
 auth.post(
   '/login/local',
-  passport.authenticate('local', { successRedirect: '/' })
+  passport.authenticate('local', {
+    successRedirect: '/'
+  })
 )
 
 // GET requests for OAuth login:

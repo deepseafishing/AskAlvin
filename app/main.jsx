@@ -36,7 +36,6 @@ const ExampleApp = connect(({ auth }) => ({
       <Switch>
         <Route
           exact
-          exact
           path="/"
           render={props =>
             user ? <SimpleMapExample {...props} /> : <Home {...props} />}

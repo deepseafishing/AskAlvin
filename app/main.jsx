@@ -24,19 +24,26 @@ import NavBar from './components/NavBar'
 import SignUpContainer from './components/SignUpContainer'
 import SimpleMapExample from './components/SimpleMapExample'
 import LoginContainer from './components/LoginContainer'
+import Home from './components/Home'
 
 const ExampleApp = connect(({ auth }) => ({
   user: auth
 }))(({ user, children }) =>
   <Router>
-    <main>
+    <div>
       <NavBar />
       <Switch>
-        <Route exact exact path="/" component={SimpleMapExample} />
+        <Route
+          exact
+          exact
+          path="/"
+          render={props =>
+            user ? <SimpleMapExample {...props} /> : <Home {...props} />}
+        />
         <Route path="/login" component={LoginContainer} />
         <Route component={NotFound} />
       </Switch>
-    </main>
+    </div>
   </Router>
 )
 

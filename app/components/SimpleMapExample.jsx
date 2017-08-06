@@ -59,7 +59,7 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
             position={marker.position}
             key={index}
             onClick={() => props.onMarkerClicker(marker)}
-            onMarke
+            icon={'http://maps.google.com/mapfiles/ms/icons/green-dot.png'}
           >
             {marker.showInfo &&
               <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>

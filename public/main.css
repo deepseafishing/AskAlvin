@@ -1,15 +1,3 @@
-body {
-  margin: 24px;
-}
-.hiddentotal {
-  opacity: 0.0;
-  display: none;
-}
-
-.materialboxed.initialized {
-  margin: 5% auto;
-}
-
 .spinning {
   animation: spin 1s infinite linear;
 }

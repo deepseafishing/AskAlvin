@@ -1,10 +1,9 @@
 /* global google */
 import { default as React, Component } from 'react'
-
-import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
-
+import { connect } from 'react-redux'
+import { withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps'
 import SearchBox from 'APP/node_modules/react-google-maps/lib/places/SearchBox'
-
+import fancyMapStyles from 'APP/public/fancyMapStyles.js'
 const INPUT_STYLE = {
   backgroundColor: `white`,
   boxSizing: `border-box`,
@@ -27,18 +26,35 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
     defaultZoom={15}
     center={props.center}
     onBoundsChanged={props.onBoundsChanged}
+    defaultOptions={{ styles: fancyMapStyles }}
   >
-    <SearchBox
-      ref={props.onSearchBoxMounted}
-      bounds={props.bounds}
-      controlPosition={google.maps.ControlPosition.TOP_LEFT}
-      onPlacesChanged={props.onPlacesChanged}
-      inputPlaceholder="Customized your placeholder"
-      inputStyle={INPUT_STYLE}
-    />
-    {props.markers.map((marker, index) =>
-      <Marker position={marker.position} key={index} />
-    )}
+    <div>
+      <SearchBox
+        ref={props.onSearchBoxMounted}
+        bounds={props.bounds}
+        controlPosition={google.maps.ControlPosition.TOP_LEFT}
+        onPlacesChanged={props.onPlacesChanged}
+        inputPlaceholder="Search NYC Restaurants"
+        inputStyle={INPUT_STYLE}
+      />
+      {console.log(props.markers)}
+      {props.markers.length !== 0 &&
+        props.markers.map((marker, index) =>
+          <Marker
+            position={marker.position}
+            key={index}
+            onClick={() => props.onMarkerClicker(marker)}
+            onMarke
+          >
+            {marker.showInfo &&
+              <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
+                <div>
+                  {marker.infoContent}
+                </div>
+              </InfoWindow>}
+          </Marker>
+        )}
+    </div>
   </GoogleMap>
 )
 
@@ -47,51 +63,91 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
  *
  * Add <script src="https://maps.googleapis.com/maps/api/js"></script> to your HTML to provide google.maps reference
  */
-export default class SearchBoxExample extends Component {
+class SearchBoxExample extends Component {
   state = {
     bounds: null,
     center: {
-      lat: 47.6205588,
-      lng: -122.3212725
+      lat: 40.704593,
+      lng: -74.009577
     },
     markers: []
   }
 
-  handleMapMounted = this.handleMapMounted.bind(this)
-  handleBoundsChanged = this.handleBoundsChanged.bind(this)
-  handleSearchBoxMounted = this.handleSearchBoxMounted.bind(this)
-  handlePlacesChanged = this.handlePlacesChanged.bind(this)
-
-  handleMapMounted(map) {
+  handleMapMounted = map => {
     this._map = map
   }
 
-  handleBoundsChanged() {
+  handleBoundsChanged = () => {
     this.setState({
       bounds: this._map.getBounds(),
       center: this._map.getCenter()
     })
   }
 
-  handleSearchBoxMounted(searchBox) {
+  handleSearchBoxMounted = searchBox => {
     this._searchBox = searchBox
   }
 
-  handlePlacesChanged() {
+  handlePlacesChanged = () => {
     const places = this._searchBox.getPlaces()
-    console.log(places)
     // Add a marker for each place returned from search bar
     const markers = places.map(place => ({
-      position: place.geometry.location
+      position: place.geometry.location,
+      infoContent: [
+        <div key={1}>
+          Name: {places[0].name}
+        </div>,
+        <div key={2}>
+          Address: {places[0].formatted_address}
+        </div>,
+        <div key={3}>
+          Phone:
+          {places[0].formatted_phone_number ||
+            places[0].international_phone_number}
+        </div>,
+        <div key={4}>
+          Website: {places[0].website}
+        </div>
+      ],
+      showInfo: false
     }))
+    console.log('array', markers)
 
-    // Set markers; set map center to first search result
     const mapCenter =
       markers.length > 0 ? markers[0].position : this.state.center
 
     this.setState({
       center: mapCenter,
-      markers
+      markers: [...this.state.markers, ...markers]
+    })
+    // axios.
+  }
+
+  handleMarkerClicker = targetMarker => {
+    console.log('markerClicker', targetMarker)
+    let setInfo
+    if (targetMarker.showInfo) setInfo = false
+    else setInfo = true
+    this.setState({
+      markers: this.state.markers.map(marker => {
+        if (marker === targetMarker) {
+          return {
+            ...marker,
+            showInfo: setInfo
+          }
+        }
+        return marker
+      })
+    })
+  }
+
+  handleMarkerClose = targetMarker => {
+    this.setState({
+      markers: this.state.markers.filter(marker => {
+        if (marker !== targetMarker) {
+          return marker
+        }
+      })
     })
   }
 
@@ -107,7 +163,14 @@ export default class SearchBoxExample extends Component {
         bounds={this.state.bounds}
         onPlacesChanged={this.handlePlacesChanged}
         markers={this.state.markers}
+        onMarkerClicker={this.handleMarkerClicker}
+        onMarkerClose={this.handleMarkerClose}
       />
     )
   }
 }
+const mapStateToProps = state => ({
+  currentUser: state.auth
+})
+
+export default connect(mapStateToProps, null)(SearchBoxExample)

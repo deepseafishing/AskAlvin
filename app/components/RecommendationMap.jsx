@@ -16,7 +16,6 @@ import {
   fetchRestaurant,
   postRestaurant
 } from 'APP/app/reducers/restaurant.jsx'
-import SearchBox from 'APP/node_modules/react-google-maps/lib/places/SearchBox'
 import fancyMapStyles from 'APP/public/fancyMapStyles.js'
 import axios from 'axios'
 const INPUT_STYLE = {
@@ -35,7 +34,7 @@ const INPUT_STYLE = {
   textOverflow: `ellipses`
 }
 
-const SearchBoxExampleGoogleMap = withGoogleMap(props =>
+const RecommendationMapConst = withGoogleMap(props =>
   <GoogleMap
     ref={props.onMapMounted}
     defaultZoom={15}
@@ -44,14 +43,6 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
     defaultOptions={{ styles: fancyMapStyles }}
   >
     <div>
-      <SearchBox
-        ref={props.onSearchBoxMounted}
-        bounds={props.bounds}
-        controlPosition={google.maps.ControlPosition.TOP_LEFT}
-        onPlacesChanged={props.onPlacesChanged}
-        inputPlaceholder="Search NYC Restaurants"
-        inputStyle={INPUT_STYLE}
-      />
       {console.log(props.markers)}
       {props.markers.length !== 0 &&
         props.markers.map((marker, index) =>
@@ -59,7 +50,6 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
             position={marker.position}
             key={index}
             onClick={() => props.onMarkerClicker(marker)}
-            onMarke
           >
             {marker.showInfo &&
               <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
@@ -78,7 +68,7 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
  *
  * Add <script src="https://maps.googleapis.com/maps/api/js"></script> to your HTML to provide google.maps reference
  */
-class SearchBoxExample extends Component {
+class RecommendationMap extends Component {
  state = {
    bounds: null,
    center: {
@@ -90,44 +80,50 @@ class SearchBoxExample extends Component {
 
  handleMapMounted = map => {
    this._map = map
-   axios.get('api/users/me/recommended/')
+   axios.get('/api/restaurants')
      .then(restaurants => {
-       const data = restaurants.data.restaurants
+       const data = restaurants.data
        console.log('restaurants', restaurants)
-       console.log(data)
+       console.log('data', data)
+       console.log(data[0].restaurant.name)
        const stateArray = data.map(el => ({
          position: {
-           lat: el.position[0],
-           lng: el.position[1]
+           lat: el.restaurant.position[0],
+           lng: el.restaurant.position[1]
          },
          showInfo: false,
          infoContent: [
-           <div>
+           <div key = {0}>
              <b>Information</b>
            </div>,
            <div key={1}>
-        Name: {el.name}
+            Name: {el.restaurant.name}
            </div>,
            <div key={2}>
-        Address: {el.address}
+          Address: {el.restaurant.address}
            </div>,
            <div key = {3} >
-        Phone: {
-               el.phone
-             }
-           </div>,
-           <div key = {5}>
-        Website: {
-               el.website
-             }
-             <hr />
-           </div>,
-
-           <div>
-             <b>Weekly Schedule:</b>
+          Phone: {el.restaurant.phone}
            </div>,
            <div key={4}>
-             {el.open_times.map(str => <p>{str}</p>)}
+          Website: {el.restaurant.website}
+             <hr />
+           </div>,
+           <div key={5}>
+             <b>Weekly Schedule:</b>
+           </div>,
+           <div key={6}>
+             {el.restaurant.open_times.map(str => <p>{str}</p>)}
+           </div>,
+           <div key={7}>
+             <hr/>
+             <b>Recommended By:</b>
+           </div>,
+           <div key={8}>
+              Name: {el.restaurant.users[0].name}
+           </div>,
+           <div key={9}>
+            Cohort: {el.restaurant.users[0].cohort}
            </div>
          ]
        }))
@@ -135,6 +131,7 @@ class SearchBoxExample extends Component {
        this.setState({
          markers: stateArray
        })
+       console.log(this.state)
      })
  }
 
@@ -143,74 +140,6 @@ class SearchBoxExample extends Component {
      bounds: this._map.getBounds(),
      center: this._map.getCenter()
    })
- }
-
- handleSearchBoxMounted = searchBox => {
-   this._searchBox = searchBox
- }
-
- handlePlacesChanged = () => {
-   const places = this._searchBox.getPlaces()
-   console.log('this is places: ', places)
-   const openTimes = places[0].opening_hours
-   const checkopen = openTimes && openTimes.weekday_text && openTimes.weekday_text.length
-   const markers = places.map(place => ({
-     position: place.geometry.location,
-     infoContent: [
-       <div>
-         <b>Information</b>
-       </div>,
-       <div key={1}>
-          Name: {places[0].name}
-       </div>,
-       <div key={2}>
-          Address: {places[0].formatted_address}
-       </div>,
-       <div key = {3} >
-          Phone: {
-           places[0].formatted_phone_number
-         }
-       </div>,
-       <div key = {5}>
-        Website: {
-           places[0].website
-         }
-       </div>,
-       <div>
-         <hr />
-         <b>Weekly Schedule</b>
-       </div>,
-       <div key={4}>
-         {checkopen ? places[0].opening_hours.weekday_text.map(str => <p>{str}</p>): 'Days Open: No information available.'}
-       </div>,
-     ],
-     showInfo: false
-   }))
-   console.log('this is markers: ', markers)
-
-   let open
-   if (checkopen) open = places[0].opening_hours.weekday_text.map(str => str)
-   else open = ['No information available.']
-   axios.post('/api/restaurants/recommend', {
-     name: places[0].name,
-     address: places[0].formatted_address,
-     phone: places[0].international_phone_number,
-     website: places[0].website,
-     position: [
-       markers[0].position.lat(), markers[0].position.lng()
-     ],
-     open_times: open
-   })
-     .catch(console.log)
-
-   const mapCenter =
-   markers.length > 0 ? markers[0].position : this.state.center
-
-   this.setState({
-     center: mapCenter,
-     markers: [...this.state.markers, ...markers]
-   })
-   console.log(this.state.markers)
  }
 
  handleMarkerClicker = targetMarker => {
@@ -232,24 +161,22 @@ class SearchBoxExample extends Component {
  }
 
  handleMarkerClose = targetMarker => {
-   const temp = targetMarker.infoContent[2].props.children[1]
-   console.log(temp, typeof temp)
-   axios.post('/api/restaurants/recommend/delete', {
-     address: temp
-   })
-     .catch(console.log)
    this.setState({
-     markers: this.state.markers.filter(marker => {
-       if (marker !== targetMarker) {
-         return marker
+     markers: this.state.markers.map(marker => {
+       if (marker === targetMarker) {
+         return {
+           ...marker,
+           showInfo: false
+         }
        }
+       return marker
      })
    })
  }
 
  render() {
    return (
-     <SearchBoxExampleGoogleMap
+     <RecommendationMapConst
        containerElement={<div style={{ height: `100vh` }} />
        }
        mapElement = {
@@ -263,9 +190,6 @@ class SearchBoxExample extends Component {
        }
        onBoundsChanged = {
          this.handleBoundsChanged
-       }
-       onSearchBoxMounted = {
-         this.handleSearchBoxMounted
        }
        bounds = {
          this.state.bounds
@@ -290,4 +214,4 @@ const mapStateToProps = state => ({
   currentUser: state.auth
 })
 
-export default connect(mapStateToProps, null)(SearchBoxExample)
+export default connect(mapStateToProps, null)(RecommendationMap)

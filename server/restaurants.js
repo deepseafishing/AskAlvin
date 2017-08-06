@@ -63,28 +63,20 @@ module.exports = require('express').Router()
       .catch(next)
   })
   // goes to delete inside of the Restaurant model
-  .post('/recommend/delete', (req, res, next) => {
-    console.log('whatever:', req.body.address)
-    console.log('here!!!!!\n\n\n\n\n\n')
-    return Restaurant.findAll({
-      where: {
-        address: req.body.address
-      }
-    })
-      .then(restaurants => {
-        restaurants.forEach(restaurant => RestaurantUser.findAll({
-          where: {
-            user_id: req.user.id,
-            restaurant_id: restaurant.id
-          }
-        }).then(restaurant => restaurant.forEach(el => el.destroy())))
-          .then((restaurant) => {
-            console.log(restaurant)
-            res.sendStatus(201)
-          })
-          .catch(next)
-      })
+  .post('/recommend/delete', (req, res, next) => Restaurant.findOne({
+    where: {
+      address: req.body.address
+    }
   })
+    .then(restaurant => RestaurantUser.findOne({
+      where: {
+        user_id: req.user.id,
+        restaurant_id: restaurant.id
+      }
+    }))
+    .then(restaurant => restaurant.destroy())
+    .then(() => res.sendStatus(201))
+    .catch(next))
 
 /*
  *

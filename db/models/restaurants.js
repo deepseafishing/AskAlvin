@@ -1,16 +1,19 @@
 'use strict'
 
 const {
-  STRING,
+  JSON,
   ARRAY,
-  DOUBLE
+  DOUBLE,
+  STRING
 } = require('sequelize')
 
 module.exports = db => db.define('restaurants', {
   name: STRING,
+  position: ARRAY(DOUBLE),
   address: STRING,
-  // inside of the json is going to be lat: some #, long: some #
-  location: ARRAY(DOUBLE)
+  phone: STRING,
+  website: STRING,
+  open_times: ARRAY(STRING)
 })
 
 module.exports.associations = (Restaurant, {
@@ -21,8 +24,8 @@ module.exports.associations = (Restaurant, {
   Restaurant.belongsToMany(User, {
     through: RestaurantUser
   })
-  Restaurant.belongsToMany(Review, {
-    through: RestaurantUser
-  })
+  // Restaurant.belongsToMany(Review, {
+  // through: RestaurantUser
+  // })
   Restaurant.hasMany(RestaurantUser)
 }

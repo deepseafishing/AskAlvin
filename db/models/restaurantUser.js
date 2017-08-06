@@ -18,7 +18,13 @@ module.exports.associations = (RestaurantUser, {
   Restaurant,
   Review
 }) => {
-  RestaurantUser.belongsTo(User)
-  RestaurantUser.belongsTo(Restaurant)
-  RestaurantUser.belongsTo(Review)
+  RestaurantUser.belongsTo(User, {
+    onDelete: 'CASCADE'
+  })
+  RestaurantUser.belongsTo(Restaurant, {
+    onDelete: 'CASCADE'
+  })
+  // RestaurantUser.belongsTo(Review, {
+  // onDelete: 'CASCADE'
+  // })
 }

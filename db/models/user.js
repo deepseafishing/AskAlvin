@@ -74,9 +74,9 @@ module.exports.associations = (
   User.belongsToMany(Restaurant, {
     through: RestaurantUser
   })
-  User.belongsToMany(Review, {
-    through: RestaurantUser
-  })
+  // User.belongsToMany(Review, {
+  // through: RestaurantUser
+  // })
   User.hasMany(RestaurantUser)
 }
 

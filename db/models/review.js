@@ -10,16 +10,16 @@ module.exports = db => db.define('reviews', {
   body: TEXT,
 })
 
-module.exports.associations = (Review, {
-  User,
-  RestaurantUser,
-  Restaurant
-}) => {
-  Review.belongsToMany(User, {
-    through: RestaurantUser
-  })
-  Review.belongsToMany(Restaurant, {
-    through: RestaurantUser
-  })
-  Review.hasMany(RestaurantUser)
-}
+// module.exports.associations = (Review, {
+// User,
+// RestaurantUser,
+// Restaurant
+// }) => {
+// Review.belongsToMany(User, {
+// through: RestaurantUser
+// })
+// Review.belongsToMany(Restaurant, {
+// through: RestaurantUser
+// })
+// Review.hasMany(RestaurantUser)
+// }

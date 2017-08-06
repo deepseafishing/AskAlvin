@@ -70,7 +70,7 @@ const editRestaurant = restaurant => ({
 
 export const fetchRestaurant = (restaurantId) =>
   dispatch =>
-    axios.get(`/api/restaurants/${restaurantId}`)
+    axios.get('/api/restaurants/')
       .then(res => res.data)
       .then(restaurant => {
         dispatch(getRestaurant(restaurant))
@@ -79,7 +79,7 @@ export const fetchRestaurant = (restaurantId) =>
 
 export const postRestaurant = restaurant =>
   dispatch =>
-    axios.post('/api/restaurant', restaurant)
+    axios.post('/api/restaurants/recommend', restaurant)
       .then(res => res.data)
       .then(newRestaurant => {
         dispatch(addRestaurant(newRestaurant))

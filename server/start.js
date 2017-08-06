@@ -3,7 +3,9 @@
 const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
-const {resolve} = require('path')
+const {
+  resolve
+} = require('path')
 const passport = require('passport')
 const PrettyError = require('pretty-error')
 const finalHandler = require('finalhandler')
@@ -41,7 +43,9 @@ module.exports = app
   }))
 
   // Body parsing middleware
-  .use(bodyParser.urlencoded({ extended: true }))
+  .use(bodyParser.urlencoded({
+    extended: true
+  }))
   .use(bodyParser.json())
 
   // Authentication middleware
@@ -50,7 +54,6 @@ module.exports = app
 
   // Serve static files from ../public
   .use(express.static(resolve(__dirname, '..', 'public')))
-
   // Serve our api - ./api also requires in ../db, which syncs with our database
   .use('/api', require('./api'))
 
@@ -84,7 +87,10 @@ if (module === require.main) {
     pkg.port,
     () => {
       console.log(`--- Started HTTP Server for ${pkg.name} ---`)
-      const { address, port } = server.address()
+      const {
+        address,
+        port
+      } = server.address()
       const host = address === '::' ? 'localhost' : address
       const urlSafeHost = host.includes(':') ? `[${host}]` : host
       console.log(`Listening on http://${urlSafeHost}:${port}`)

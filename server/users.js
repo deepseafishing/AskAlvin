@@ -15,13 +15,13 @@ const {
 
 module.exports = require('express').Router()
   .get('/',
-    // assertAdmin,
+    assertAdmin,
     (req, res, next) =>
       User.findAll()
         .then(users => res.json(users))
         .catch(next))
   .get('/rs',
-    // assertAdmin,
+    assertAdmin,
     (req, res, next) =>
       RestaurantUser.findAll()
         .then(el => res.json(el))
@@ -40,14 +40,44 @@ module.exports = require('express').Router()
       })
       .catch(next)
   })
+  // get info about yourself
+  .get('/me',
+    mustBeLoggedIn,
+    (req, res, next) =>
+      User.findOne({
+        where: {
+          email: req.user.email
+        }
+      })
+        .then(user => res.json(user))
+        .catch(next))
+  // get all your own recommendations
+  .get('/me/recommended',
+    mustBeLoggedIn,
+    (req, res, next) =>
+      User.findOne({
+        where: {
+          email: req.user.email
+        }
+      })
+        .then(user => RestaurantUser.findAll({
+          where: {
+            user_id: user.id
+          }
+        }))
+        .then(data => res.json(data))
+        .catch(next))
+  // admin find a person by their id
   .get('/:id',
-    // mustBeLoggedIn,
+    assertAdmin,
     (req, res, next) =>
       User.findById(req.params.id)
         .then(user => res.json(user))
         .catch(next))
+
+  // admin get all markers from restaurant user where the field is false and the user id matches
   .get('/:id/recommended',
-    // mustBeLoggedIn,
+    mustBeLoggedIn,
     (req, res, next) =>
       User.findById(req.params.id, {
         include: [{
@@ -57,15 +87,17 @@ module.exports = require('express').Router()
           },
           include: [{
             model: Restaurant
-          }, {model: Review}],
+          }, {
+            model: Review
+          }],
         }]
       })
         .then(users => res.json(users))
         .catch(next))
-  .post('/:id/recommend',
-    // mustBeLoggedIn,
-    (req, res, next) => {
-      // google request here then store into restaurants table
-      // update user table with exp and or level
-    })
+  // get 
+  // .post('/recommend',
+// mustBeLoggedIn,
+// (req, res, next) => {
+// update user table with exp and or level
+// })
 // https://maps.googleapis.com/maps/api/place/textsearch/json?location=40.7128,74.0059&radius=50000&type=restaurant&key=AIzaSyB-GQEdmzIa5BPjowzaKDoaTklmxYaJvu8

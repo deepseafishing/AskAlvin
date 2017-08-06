@@ -12,7 +12,7 @@ import {
   Marker,
   InfoWindow
 } from 'react-google-maps'
-
+import { fetchRestaurant, postRestaurant } from 'APP/app/reducers/restaurant.jsx'
 import SearchBox from 'APP/node_modules/react-google-maps/lib/places/SearchBox'
 
 const INPUT_STYLE = {
@@ -93,6 +93,7 @@ class SearchBoxExample extends Component {
 
  handlePlacesChanged = () => {
    const places = this._searchBox.getPlaces()
+   // this.props.storeMarker()
    console.log('user:', this.props.currentUser)
    console.log(places)
    // Add a marker for each place returned from search bar
@@ -107,7 +108,7 @@ class SearchBoxExample extends Component {
     ]),
      showInfo: false
    }))
-   console.log('array', markers)
+   console.log('markers', markers)
 
    const mapCenter =
    markers.length > 0 ? markers[0].position : this.state.center
@@ -116,7 +117,6 @@ class SearchBoxExample extends Component {
      center: mapCenter,
      markers: [...this.state.markers, ...markers]
    })
-   // axios.
  }
 
  handleMarkerClicker = targetMarker => {
@@ -199,5 +199,9 @@ class SearchBoxExample extends Component {
 const mapStateToProps = state => ({
   currentUser: state.auth
 })
+const mapDispatchToProps = dispatch => ({
+  fetchMarkers: () => dispatch(fetchRestaurant()),
+  storeMarker: (marker) => dispatch(postRestaurant(marker))
+})
 
-export default connect(mapStateToProps, null)(SearchBoxExample)
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBoxExample)

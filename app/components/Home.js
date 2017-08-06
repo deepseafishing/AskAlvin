@@ -38,9 +38,9 @@ class Home extends React.Component {
               <br />
               <br />
               Sorry, Nimit.. We couldn't find a black & white photo of you.
-              <br />Currently, looking for someone rich enough to back us our
-              server fees. <br />contact Stanley at 1706-NY-FSA Campus if you're
-              interested.
+              <br />Currently, we're looking for someone rich enough to back us
+              for our server fees. <br />contact Stanley at 1706-NY-FSA Campus
+              if you're interested.
             </h5>
           </div>
         </div>

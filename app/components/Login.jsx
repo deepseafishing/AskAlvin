@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Card, Input, Icon } from 'react-materialize'
+import { Row, Col, Card, Input, Icon, Button } from 'react-materialize'
 import LoaderButton from './LoaderButton'
 import 'APP/node_modules/materialize-social/materialize-social.css'
 
@@ -61,6 +61,9 @@ export default function Login({
               </Col>
             </Row>
           </form>
+          <a href="https://www.fullstackacademy.com">
+            <LoaderButton text="If you want to sign up..." />
+          </a>
         </Card>
       </Col>
     </Row>

@@ -35,6 +35,7 @@ class NavBar extends React.Component {
         Logout
       </NavItem>,
       <Dropdown
+        key={3}
         trigger={
           <li>
             <NavLink to="#!">

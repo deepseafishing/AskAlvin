@@ -1,12 +1,19 @@
 'use strict'
 
 const {
-  JSON
+  JSON,
+  ARRAY,
+  DOUBLE,
+  STRING
 } = require('sequelize')
 
 module.exports = db => db.define('restaurants', {
-  marker: JSON
-  // inside of the json is going to be lat: some #, long: some #
+  name: STRING,
+  position: ARRAY(DOUBLE),
+  address: STRING,
+  phone: STRING,
+  website: STRING,
+  open_times: ARRAY(STRING)
 })
 
 module.exports.associations = (Restaurant, {

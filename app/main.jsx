@@ -24,6 +24,7 @@ import NavBar from './components/NavBar'
 import SignUpContainer from './components/SignUpContainer'
 import SimpleMapExample from './components/SimpleMapExample'
 import LoginContainer from './components/LoginContainer'
+import RecommendationMap from './components/RecommendationMap'
 
 const ExampleApp = connect(({ auth }) => ({
   user: auth
@@ -34,6 +35,7 @@ const ExampleApp = connect(({ auth }) => ({
       <Switch>
         <Route exact exact path="/" component={SimpleMapExample} />
         <Route path="/login" component={LoginContainer} />
+        <Route path="/recommended" component={RecommendationMap} />
         <Route component={NotFound} />
       </Switch>
     </main>

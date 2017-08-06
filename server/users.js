@@ -54,19 +54,17 @@ module.exports = require('express').Router()
   // get all your own recommendations
   .get('/me/recommended',
     mustBeLoggedIn,
-    (req, res, next) =>
-      User.findOne({
-        where: {
-          email: req.user.email
-        }
-      })
-        .then(user => RestaurantUser.findAll({
-          where: {
-            user_id: user.id
-          }
-        }))
-        .then(data => res.json(data))
-        .catch(next))
+    (req, res, next) => User.findOne({
+      where: {
+        email: req.user.email
+      },
+      include: [{
+        model: Restaurant,
+        attributes: ['name', 'address', 'phone', 'website', 'open_times', 'position']
+      }]
+    })
+      .then(restaurants => res.json(restaurants))
+      .catch(next))
   // admin find a person by their id
   .get('/:id',
     assertAdmin,
@@ -75,27 +73,27 @@ module.exports = require('express').Router()
         .then(user => res.json(user))
         .catch(next))
 
-  // admin get all markers from restaurant user where the field is false and the user id matches
-  .get('/:id/recommended',
-    mustBeLoggedIn,
-    (req, res, next) =>
-      User.findById(req.params.id, {
-        include: [{
-          model: RestaurantUser,
-          where: {
-            access: false
-          },
-          include: [{
-            model: Restaurant
-          }, {
-            model: Review
-          }],
-        }]
-      })
-        .then(users => res.json(users))
-        .catch(next))
-  // get 
-  // .post('/recommend',
+// admin get all markers from restaurant user where the field is false and the user id matches
+// .post('/me/recommended',
+// mustBeLoggedIn,
+// (req, res, next) =>
+// User.findAll({
+// include: [{
+// model: RestaurantUser,
+// where: {
+// email: 
+// },
+// include: [{
+// model: Restaurant
+// }, {
+// model: Review
+// }],
+// }]
+// })
+// .then(users => res.json(users))
+// .catch(next))
+// get 
+// .post('/recommend',
 // mustBeLoggedIn,
 // (req, res, next) => {
 // update user table with exp and or level

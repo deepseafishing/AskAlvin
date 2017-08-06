@@ -20,7 +20,7 @@ class Home extends React.Component {
           <div className="row container text-container">
             <h2 className="header">
               Ask Alvin for the Best Places to eat!
-              <br /> Because He'll be always around us and alive!
+              <br /> Because He'll always be alive!
             </h2>
             <h5 className="grey-text text-darken-3 lighten-3 text-parallex">
               Ask Alvin is a Food Restaurants Recommendation Services for
@@ -30,7 +30,7 @@ class Home extends React.Component {
               <br />
               WHAATTT? YOU'RE NOT FULLSTACK ALUMNI YET?
               <br />
-              Then Join FullStack Academy at here =>
+              Then consider joining FullStack Academy at here =>
               <a target="_blank" href="https://www.fullstackacademy.com/">
                 FullStack Academy
               </a>

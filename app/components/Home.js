@@ -30,9 +30,9 @@ class Home extends React.Component {
               <br />
               WHAATTT? <br />YOU'RE NOT FULLSTACK ALUMNI YET?
               <br />
-              Then consider joining FullStack Academy at here =><br />
-              <a target="_blank" href="https://www.fullstackacademy.com/">
-                FullStack Academy
+              Then consider joining FullStack Academy at{' '}
+              <a target="_blank" href="https://www.fullstackacademy.com/apply">
+                here
               </a>
               <br />
               <br />

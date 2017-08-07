@@ -77,6 +77,30 @@ module.exports = require('express').Router()
     .then(restaurant => restaurant.destroy())
     .then(() => res.sendStatus(201))
     .catch(next))
+  .post('/recommend/review', (req, res, next) => {
+    console.log(req.body)
+    return Restaurant.findOne({
+      where: {
+        address: req.body.address
+      }
+    })
+      .then(restaurant => RestaurantUser.findOne({
+        where: {
+          // user_id: req.user.id,
+          restaurant_id: restaurant.id
+        }
+      }))
+      .then(relation => RestaurantUser.update({
+        review: req.body.text
+      }, {
+        where: {
+          user_id: relation.user_id,
+          restaurant_id: relation.restaurant_id
+        }
+      }))
+      .then(thing => res.json(thing))
+      .catch(next)
+  })
 
 /*
  *

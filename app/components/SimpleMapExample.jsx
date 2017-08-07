@@ -38,7 +38,7 @@ const INPUT_STYLE = {
 const SearchBoxExampleGoogleMap = withGoogleMap(props =>
   <GoogleMap
     ref={props.onMapMounted}
-    defaultZoom={15}
+    defaultZoom={13}
     center={props.center}
     onBoundsChanged={props.onBoundsChanged}
     defaultOptions={{ styles: fancyMapStyles }}
@@ -82,8 +82,8 @@ class SearchBoxExample extends Component {
  state = {
    bounds: null,
    center: {
-     lat: 40.704593,
-     lng: -74.009577
+     lat: 40.7536111,
+     lng: -73.9841667
    },
    markers: []
  }

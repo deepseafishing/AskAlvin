@@ -3,20 +3,25 @@
 const {
   STRING,
   INTEGER,
-  BOOLEAN
+  BOOLEAN,
+  TEXT
 } = require('sequelize')
 
 module.exports = db => db.define('restaurantUsers', {
   access: {
     type: BOOLEAN,
     defaultValue: false
+  },
+  review: {
+    type: TEXT,
+    defaultValue: ''
   }
 })
 
 module.exports.associations = (RestaurantUser, {
   User,
   Restaurant,
-  Review
+  // Review
 }) => {
   RestaurantUser.belongsTo(User, {
     onDelete: 'CASCADE'

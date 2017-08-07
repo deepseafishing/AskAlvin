@@ -160,27 +160,27 @@ class SearchBoxExample extends Component {
        <div>
          <b>Information</b>
        </div>,
-       <div key={1}>
+       <div key={0}>
           Name: {places[0].name}
        </div>,
-       <div key={2}>
+       <div key={1}>
           Address: {places[0].formatted_address}
        </div>,
-       <div key = {3} >
+       <div key={3} >
           Phone: {
            places[0].formatted_phone_number
          }
        </div>,
-       <div key = {5}>
+       <div key={4}>
         Website: {
            places[0].website
          }
        </div>,
-       <div>
+       <div key={5}>
          <hr />
          <b>Weekly Schedule</b>
        </div>,
-       <div key={4}>
+       <div key={6}>
          {checkopen ? places[0].opening_hours.weekday_text.map(str => <p>{str}</p>): 'Days Open: No information available.'}
        </div>,
      ],

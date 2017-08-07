@@ -18,8 +18,8 @@ module.exports = db => db.define('restaurants', {
 
 module.exports.associations = (Restaurant, {
   User,
-  RestaurantUser,
-  Review
+  RestaurantUser
+  // Review
 }) => {
   Restaurant.belongsToMany(User, {
     through: RestaurantUser

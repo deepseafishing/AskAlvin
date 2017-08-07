@@ -8,8 +8,13 @@
 import 'babel-polyfill'
 
 import React from 'react'
-import { render } from 'react-dom'
-import { Provider, connect } from 'react-redux'
+import {
+  render
+} from 'react-dom'
+import {
+  Provider,
+  connect
+} from 'react-redux'
 import {
   BrowserRouter as Router,
   Switch,
@@ -26,10 +31,16 @@ import SimpleMapExample from './components/SimpleMapExample'
 import LoginContainer from './components/LoginContainer'
 import Home from './components/Home'
 import RecommendationMap from './components/RecommendationMap'
+import Review from './components/Review'
 
-const ExampleApp = connect(({ auth }) => ({
+const ExampleApp = connect(({
+  auth
+}) => ({
   user: auth
-}))(({ user, children }) =>
+}))(({
+  user,
+  children
+}) =>
   <Router>
     <div>
       <NavBar />
@@ -42,6 +53,7 @@ const ExampleApp = connect(({ auth }) => ({
         />
         <Route path="/login" component={LoginContainer} />
         <Route path="/recommended" component={RecommendationMap} />
+        <Route path="/review" component={Review} />
         <Route component={NotFound} />
       </Switch>
     </div>

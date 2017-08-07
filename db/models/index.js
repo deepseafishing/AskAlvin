@@ -17,8 +17,8 @@ const app = require('APP'),
     OAuth: require('./oauth'),
     User: require('./user'),
     Restaurant: require('./restaurants.js'),
-    RestaurantUser: require('./restaurantUser.js'),
-    Review: require('./review.js')
+    RestaurantUser: require('./restaurantUser.js')
+    // Review: require('./review.js')
 
   },
   {

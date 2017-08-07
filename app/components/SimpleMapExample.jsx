@@ -10,7 +10,8 @@ import {
   withGoogleMap,
   GoogleMap,
   Marker,
-  InfoWindow
+  InfoWindow,
+  OverlayView
 } from 'react-google-maps'
 import {
   fetchRestaurant,
@@ -19,12 +20,15 @@ import {
 import SearchBox from 'APP/node_modules/react-google-maps/lib/places/SearchBox'
 import fancyMapStyles from 'APP/public/fancyMapStyles.js'
 import axios from 'axios'
+import {
+  Button
+} from 'react-materialize'
 const INPUT_STYLE = {
   backgroundColor: `white`,
   boxSizing: `border-box`,
   MozBoxSizing: `border-box`,
   border: `1px solid transparent`,
-  width: `240px`,
+  width: `312px`,
   height: `32px`,
   marginTop: `27px`,
   padding: `0 12px`,
@@ -32,6 +36,7 @@ const INPUT_STYLE = {
   boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
   fontSize: `14px`,
   outline: `none`,
+  zIndex: '99',
   textOverflow: `ellipses`
 }
 
@@ -43,32 +48,37 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
     onBoundsChanged={props.onBoundsChanged}
     defaultOptions={{ styles: fancyMapStyles }}
   >
-    <div>
-      <SearchBox
-        ref={props.onSearchBoxMounted}
-        bounds={props.bounds}
-        controlPosition={google.maps.ControlPosition.TOP_LEFT}
-        onPlacesChanged={props.onPlacesChanged}
-        inputPlaceholder="Search NYC Restaurants"
-        inputStyle={INPUT_STYLE}
-      />
-      {console.log(props.markers)}
-      {props.markers.length !== 0 &&
-        props.markers.map((marker, index) =>
-          <Marker
-            position={marker.position}
-            key={index}
-            onClick={() => props.onMarkerClicker(marker)}
-            icon={'http://maps.google.com/mapfiles/ms/icons/green-dot.png'}
-          >
-            {marker.showInfo &&
-              <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
-                <div>
-                  {marker.infoContent}
-                </div>
-              </InfoWindow>}
-          </Marker>
-        )}
+    <SearchBox
+      ref={props.onSearchBoxMounted}
+      bounds={props.bounds}
+      controlPosition={google.maps.ControlPosition.TOP_LEFT}
+      onPlacesChanged={props.onPlacesChanged}
+      inputPlaceholder="Search NYC Restaurants"
+      inputStyle={INPUT_STYLE}
+    />
+    {props.markers.length !== 0 &&
+      props.markers.map((marker, index) =>
+        <Marker
+          position={marker.position}
+          key={index}
+          onClick={() => props.onMarkerClicker(marker)}
+          icon={marker.color}
+        >
+          {marker.showInfo &&
+            <InfoWindow onCloseClick={() =>
+              marker.handler(marker)}
+            >
+              <div>
+                {marker.infoContent}
+              </div>
+            </InfoWindow>}
+        </Marker>
+      )}
+    <div id="status-board" className="dropSheet">
+      {props.markers[props.markers.length - 1] &&
+        props.markers[props.markers.length - 1].infoContent}
+      <Button floating className="blue" waves="light" icon="add" />
+      <Button floating className="red" waves="light" icon="remove" />
     </div>
   </GoogleMap>
 )
@@ -85,53 +95,58 @@ class SearchBoxExample extends Component {
      lat: 40.7536111,
      lng: -73.9841667
    },
-   markers: []
+   markers: [],
+   currentMarker: {}
  }
 
  handleMapMounted = map => {
    this._map = map
-   axios.get('api/users/me/recommended/')
+   axios.get('/api/restaurants')
      .then(restaurants => {
-       const data = restaurants.data.restaurants
-       console.log('restaurants', restaurants)
-       console.log(data)
-       const stateArray = data.map(el => ({
+       const data = restaurants.data
+       const stateArray = data.map(place => ({
          position: {
-           lat: el.position[0],
-           lng: el.position[1]
+           lat: place.restaurant.position[0],
+           lng: place.restaurant.position[1]
          },
          showInfo: false,
-         infoContent: [
-           <div>
-             <b>Information</b>
-           </div>,
-           <div key={1}>
-        Name: {el.name}
-           </div>,
-           <div key={2}>
-        Address: {el.address}
-           </div>,
-           <div key = {3} >
-        Phone: {
-               el.phone
-             }
-           </div>,
-           <div key = {5}>
-        Website: {
-               el.website
-             }
-             <hr />
-           </div>,
+         color: this.props.user.id ===
+      place.restaurant.users[0].restaurantUsers.user_id
+           ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png' : 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
 
-           <div>
-             <b>Weekly Schedule:</b>
-           </div>,
-           <div key={4}>
-             {el.open_times.map(str => <p>{str}</p>)}
+         handler: this.props.user.id ===
+      place.restaurant.users[0].restaurantUsers.user_id
+           ? this.handleOwnMarkerClose : this.handleOtherMarkerClose,
+
+         infoContent: (
+           <div key={place.restaurant.name}>
+             <b>Information</b>
+             <br />
+            Name: {place.restaurant.name}
+             <br />
+            Address: {place.restaurant.address}
+             <br />
+            Phone: {place.restaurant.phone}
+             <br />
+            Website: {place.restaurant.website}
+             <br />
+             <div className="open-close-time">
+               <b>Weekly Schedule</b>
+               <br />
+               {place.restaurant.open_times.map(str =>
+                 <p>
+                   {str}
+                 </p>
+               )}
+             </div>
+             <b>Recommended By</b>
+             <br />
+             Name: {place.restaurant.users[0].name}
+             <br />
+             Cohort: {place.restaurant.users[0].cohort}
            </div>
-         ]
+         )
        }))
-       console.log(stateArray)
        this.setState({
          markers: stateArray
        })
@@ -151,56 +166,58 @@ class SearchBoxExample extends Component {
 
  handlePlacesChanged = () => {
    const places = this._searchBox.getPlaces()
-   console.log('this is places: ', places)
    const openTimes = places[0].opening_hours
-   const checkopen = openTimes && openTimes.weekday_text && openTimes.weekday_text.length
+   console.log(this.props.user)
+   const checkopen =
+   openTimes && openTimes.weekday_text && openTimes.weekday_text.length
    const markers = places.map(place => ({
      position: place.geometry.location,
-     infoContent: [
-       <div>
+     infoContent: (
+       <div key={place.name}>
          <b>Information</b>
-       </div>,
-       <div key={0}>
-          Name: {places[0].name}
-       </div>,
-       <div key={1}>
-          Address: {places[0].formatted_address}
-       </div>,
-       <div key={3} >
-          Phone: {
-           places[0].formatted_phone_number
-         }
-       </div>,
-       <div key={4}>
-        Website: {
-           places[0].website
-         }
-       </div>,
-       <div key={5}>
-         <hr />
-         <b>Weekly Schedule</b>
-       </div>,
-       <div key={6}>
-         {checkopen ? places[0].opening_hours.weekday_text.map(str => <p>{str}</p>): 'Days Open: No information available.'}
-       </div>,
-     ],
-     showInfo: false
+         <br />
+          Name: {place.name}
+         <br />
+          Address: {place.formatted_address}
+         <br />
+          Phone: {place.formatted_phone_number}
+         <br />
+          Website: {place.website}
+         <br />
+         <div className="open-close-time">
+           <b>Weekly Schedule</b>
+           {checkopen
+             ? place.opening_hours.weekday_text.map(str =>
+               <p>
+                 {str}
+               </p>
+             )
+             : 'Days Open: No information available.'}
+         </div>
+         <b>Recommended By</b>
+         <br />
+          Name: {this.props.user.name}
+         <br />
+          Cohort: {this.props.user.cohort}
+       </div>
+     ),
+     showInfo: false,
+     handler: this.handleOwnMarkerClose,
+     color: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
    }))
-   console.log('this is markers: ', markers)
 
    let open
    if (checkopen) open = places[0].opening_hours.weekday_text.map(str => str)
    else open = ['No information available.']
-   axios.post('/api/restaurants/recommend', {
-     name: places[0].name,
-     address: places[0].formatted_address,
-     phone: places[0].international_phone_number,
-     website: places[0].website,
-     position: [
-       markers[0].position.lat(), markers[0].position.lng()
-     ],
-     open_times: open
-   })
+   axios
+     .post('/api/restaurants/recommend', {
+       name: places[0].name,
+       address: places[0].formatted_address,
+       phone: places[0].international_phone_number,
+       website: places[0].website,
+       position: [markers[0].position.lat(), markers[0].position.lng()],
+       open_times: open
+     })
      .catch(console.log)
 
    const mapCenter =
@@ -210,11 +227,9 @@ class SearchBoxExample extends Component {
      center: mapCenter,
      markers: [...this.state.markers, ...markers]
    })
-   console.log(this.state.markers)
  }
 
  handleMarkerClicker = targetMarker => {
-   console.log('markerClicker', targetMarker)
    let setInfo
    if (targetMarker.showInfo) setInfo = false
    else setInfo = true
@@ -231,12 +246,26 @@ class SearchBoxExample extends Component {
    })
  }
 
- handleMarkerClose = targetMarker => {
-   const temp = targetMarker.infoContent[2].props.children[1]
-   console.log(temp, typeof temp)
-   axios.post('/api/restaurants/recommend/delete', {
-     address: temp
+ handleOtherMarkerClose = targetMarker => {
+   this.setState({
+     markers: this.state.markers.map(marker => {
+       if (marker === targetMarker) {
+         return {
+           ...marker,
+           showInfo: false
+         }
+       }
+       return marker
+     })
    })
+ }
+
+ handleOwnMarkerClose = targetMarker => {
+   const address = targetMarker.infoContent.props.children[6]
+   axios
+     .post('/api/restaurants/recommend/delete', {
+       address
+     })
      .catch(console.log)
    this.setState({
      markers: this.state.markers.filter(marker => {
@@ -279,15 +308,12 @@ class SearchBoxExample extends Component {
        onMarkerClicker = {
          this.handleMarkerClicker
        }
-       onMarkerClose = {
-         this.handleMarkerClose
-       }
      />
    )
  }
 }
 const mapStateToProps = state => ({
-  currentUser: state.auth
+  user: state.auth
 })
 
 export default connect(mapStateToProps, null)(SearchBoxExample)

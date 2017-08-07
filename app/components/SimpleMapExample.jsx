@@ -67,7 +67,9 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
       )}
     <div id="status-board" className="dropSheet">
       {props.markers[props.markers.length - 1] &&
-        props.markers[props.markers.length - 1].infoContent}
+        props.markers[
+          props.markers.length - 1
+        ].infoContent.props.children.slice(0, 13)}
       <Button floating className="blue" waves="light" icon="add" />
       <Button floating className="red" waves="light" icon="remove" />
     </div>
@@ -115,7 +117,10 @@ class SearchBoxExample extends Component {
             <br />
             Phone: {place.restaurant.phone}
             <br />
-            Website: {place.restaurant.website}
+            Website:
+            <a target="_blank" href={place.restaurant.website}>
+              {place.restaurant.website}
+            </a>
             <div className="open-close-time">
               <b>Weekly Schedule</b>
               <br />
@@ -154,7 +159,6 @@ class SearchBoxExample extends Component {
       position: place.geometry.location,
       infoContent: (
         <div key={place.name}>
-          <br />
           <b>Information</b>
           <br />
           Name: {place.name}
@@ -163,7 +167,10 @@ class SearchBoxExample extends Component {
           <br />
           Phone: {place.formatted_phone_number}
           <br />
-          Website: {place.website}
+          Website:{' '}
+          <a target="_blank" href={place.website}>
+            {place.website}
+          </a>
           <br />
           <div className="open-close-time">
             <b>Weekly Schedule</b>

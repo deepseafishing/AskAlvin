@@ -46,3 +46,8 @@
   color: #12273b;
   height: 60px;
 }
+
+.modal-profile-text {
+  display: inline-block;
+  font-size: 30px;
+}

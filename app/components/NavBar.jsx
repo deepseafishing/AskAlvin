@@ -49,7 +49,6 @@ class NavBar extends React.Component {
               <img
                 key={3}
                 src={this.props.user.photo}
-                alt=""
                 className="profile-photo circle"
               />
               <i className="material-icons right">arrow_drop_down</i>
@@ -60,12 +59,21 @@ class NavBar extends React.Component {
       <Modal
         key={4}
         id="fullstack-profile"
-        header={
-          'Hello!' + this.props.user.name + ' from ' + this.props.user.cohort
-        }
+        header="What about recommending your favorite restaurant to FullStack Alumi today?"
         bottomSheet
       >
-        {this.props.user.photo}
+        <img
+          key={3}
+          src={this.props.user.photo}
+          className="modal-profile-photo circle"
+        />
+        <div className="modal-profile-text">
+          <span> Hello! </span>
+          <span> {' ' + this.props.user.name}</span>
+          <br />
+          <span> Cohort </span>:
+          <span> {this.props.user.cohort}</span>
+        </div>
       </Modal>
     ]
   }

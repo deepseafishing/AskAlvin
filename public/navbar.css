@@ -28,3 +28,11 @@ nav .nav-wrapper a {
   height: 48px;
   vertical-align: middle;
 }
+
+.modal-profile-photo {
+  width: 90px;
+  height: 90px;
+  display: inline-block;
+  vertical-align: bottom;
+  margin-right: 40px;
+}

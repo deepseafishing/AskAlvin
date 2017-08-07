@@ -70,9 +70,21 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
         props.markers[
           props.markers.length - 1
         ].infoContent.props.children.slice(0, 13)}
-      <Button floating className="blue" waves="light" icon="add" />
-      <Button floating className="red" waves="light" icon="remove" />
+      <form>
+        <label>Review</label>
+        <textarea
+          className="review-text"
+          placeholder="Write about this restaurant here"
+        />
+      </form>
     </div>
+    <Button floating className="blue add-button" waves="light" icon="add" />
+    <Button
+      floating
+      className="red remove-button"
+      waves="light"
+      icon="remove"
+    />
   </GoogleMap>
 )
 
@@ -167,7 +179,7 @@ class SearchBoxExample extends Component {
           <br />
           Phone: {place.formatted_phone_number}
           <br />
-          Website:{' '}
+          Website:
           <a target="_blank" href={place.website}>
             {place.website}
           </a>

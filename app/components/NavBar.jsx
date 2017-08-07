@@ -1,3 +1,4 @@
+/* global $ */
 import React from 'react'
 import { NavLink, withRouter } from 'react-router-dom'
 import {
@@ -7,7 +8,8 @@ import {
   NavItem,
   Dropdown,
   Button,
-  Icon
+  Icon,
+  Modal
 } from 'react-materialize'
 import { connect } from 'react-redux'
 import 'APP/public/navbar.css'
@@ -38,7 +40,12 @@ class NavBar extends React.Component {
         key={3}
         trigger={
           <li>
-            <NavLink to="#!">
+            <NavLink
+              to="#!"
+              onClick={() => {
+                $('#fullstack-profile').modal('open')
+              }}
+            >
               <img
                 key={3}
                 src={this.props.user.photo}
@@ -49,7 +56,17 @@ class NavBar extends React.Component {
             </NavLink>
           </li>
         }
-      />
+      />,
+      <Modal
+        key={4}
+        id="fullstack-profile"
+        header={
+          'Hello!' + this.props.user.name + ' from ' + this.props.user.cohort
+        }
+        bottomSheet
+      >
+        {this.props.user.photo}
+      </Modal>
     ]
   }
 

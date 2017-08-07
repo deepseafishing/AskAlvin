@@ -61,7 +61,7 @@ export default function Login({
               </Col>
             </Row>
           </form>
-          <a href="https://www.fullstackacademy.com">
+          <a href="https://www.fullstackacademy.com/apply">
             <LoaderButton text="If you want to sign up..." />
           </a>
         </Card>

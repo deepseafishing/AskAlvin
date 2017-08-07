@@ -21,8 +21,28 @@
 }
 
 .dropSheet {
+  padding: 20px;
   background-color: white;
   background-image: none;
-  opacity: 0.5;
+  opacity: 0.6;
   filter: alpha(opacity=50);
+}
+
+.add-button {
+  opacity: 1;
+  position: absolute;
+  top: 365px;
+  left: 150px;
+}
+
+.remove-button {
+  opacity: 1;
+  position: absolute;
+  top: 365px;
+  left: 200px;
+}
+
+.review-text {
+  color: #12273b;
+  height: 60px;
 }

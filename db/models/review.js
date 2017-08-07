@@ -1,14 +1,14 @@
-'use strict'
+// 'use strict'
 
-const {
-  STRING,
-  TEXT
-} = require('sequelize')
+// const {
+// STRING,
+// TEXT
+// } = require('sequelize')
 
-module.exports = db => db.define('reviews', {
-  title: STRING,
-  body: TEXT,
-})
+// module.exports = db => db.define('reviews', {
+// title: STRING,
+// body: TEXT
+// })
 
 // module.exports.associations = (Review, {
 // User,

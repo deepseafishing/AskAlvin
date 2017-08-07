@@ -58,7 +58,7 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
           icon={marker.color}
         >
           {marker.showInfo &&
-            <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
+            <InfoWindow onCloseClick={() => marker.handler(marker)}>
               <div>
                 {marker.infoContent}
               </div>
@@ -119,6 +119,13 @@ class SearchBoxExample extends Component {
           place.restaurant.users[0].restaurantUsers.user_id
             ? 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
             : 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+
+        handler:
+          this.props.user.id ===
+          place.restaurant.users[0].restaurantUsers.user_id
+            ? this.handleOwnMarkerClose
+            : this.handleOtherMarkerClose,
+
         infoContent: (
           <div key={place.restaurant.name}>
             <b>Information</b>
@@ -129,7 +136,7 @@ class SearchBoxExample extends Component {
             <br />
             Phone: {place.restaurant.phone}
             <br />
-            Website:
+            Website:{' '}
             <a target="_blank" href={place.restaurant.website}>
               {place.restaurant.website}
             </a>
@@ -142,6 +149,11 @@ class SearchBoxExample extends Component {
                 </p>
               )}
             </div>
+            <b>Recommended By</b>
+            <br />
+            Name: {place.restaurant.users[0].name}
+            <br />
+            Cohort: {place.restaurant.users[0].cohort}
           </div>
         )
       }))
@@ -179,7 +191,7 @@ class SearchBoxExample extends Component {
           <br />
           Phone: {place.formatted_phone_number}
           <br />
-          Website:
+          Website:{' '}
           <a target="_blank" href={place.website}>
             {place.website}
           </a>
@@ -194,9 +206,16 @@ class SearchBoxExample extends Component {
                 )
               : 'Days Open: No information available.'}
           </div>
+          <b>Recommended By</b>
+          <br />
+          Name: {this.props.user.name}
+          <br />
+          Cohort: {this.props.user.cohort}
         </div>
       ),
-      showInfo: false
+      showInfo: false,
+      handler: this.handleOwnMarkerClose,
+      color: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
     }))
 
     let open
@@ -239,7 +258,21 @@ class SearchBoxExample extends Component {
     })
   }
 
-  handleMarkerClose = targetMarker => {
+  handleOtherMarkerClose = targetMarker => {
+    this.setState({
+      markers: this.state.markers.map(marker => {
+        if (marker === targetMarker) {
+          return {
+            ...marker,
+            showInfo: false
+          }
+        }
+        return marker
+      })
+    })
+  }
+
+  handleOwnMarkerClose = targetMarker => {
     const address = targetMarker.infoContent.props.children[6]
     axios
       .post('/api/restaurants/recommend/delete', {
@@ -268,7 +301,6 @@ class SearchBoxExample extends Component {
         onPlacesChanged={this.handlePlacesChanged}
         markers={this.state.markers}
         onMarkerClicker={this.handleMarkerClicker}
-        onMarkerClose={this.handleMarkerClose}
       />
     )
   }

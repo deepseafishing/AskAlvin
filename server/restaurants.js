@@ -38,7 +38,7 @@ module.exports = require('express').Router()
       .catch(next))
 
   // when axios request hits post, restaurant find or creates restaurant in the db in restaurant table, with given marker info
-  .post('/recommend', mustBeLoggedIn, (req, res, next) => {
+  .post('/recommend', (req, res, next) => {
     console.log('here', req.body)
     return Restaurant.findOrCreate({
       where: {
@@ -59,6 +59,11 @@ module.exports = require('express').Router()
           }
         })
       })
+      .spread((relation, created) => RestaurantUser.update({
+        review: req.body.text
+      }, {
+        where: relation
+      }))
       .then(() => res.status(200).send('done'))
       .catch(next)
   })

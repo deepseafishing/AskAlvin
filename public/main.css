@@ -10,3 +10,19 @@
     transform: scale(1) rotate(360deg);
   }
 }
+
+#status-board {
+  position: absolute;
+  color: #12273b;
+  top: 123px;
+  width: 392px;
+  height: 238px;
+  left: 10px;
+}
+
+.dropSheet {
+  background-color: white;
+  background-image: none;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}

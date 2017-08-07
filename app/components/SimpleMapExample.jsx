@@ -67,7 +67,7 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
       )}
     {console.log(
       props.currentMarker[0] &&
-        props.currentMarker[0].infoContent.props.children.slice(0, 13)
+        props.currentMarker[0].infoContent.props.children
     )}
     {props.currentMarker.length !== 0 &&
       props.currentMarker.map((marker, index) =>
@@ -102,7 +102,16 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
       waves="light"
       icon="add"
       onClick={() => {
-        axios.pos()
+        axios
+          .post('/api/restaurants/recommend', {
+            name: places[0].name,
+            address: places[0].formatted_address,
+            phone: places[0].international_phone_number,
+            website: places[0].website,
+            position: [markers[0].position.lat(), markers[0].position.lng()],
+            open_times: open
+          })
+          .catch(console.log)
       }}
     />
     <Button
@@ -113,9 +122,9 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
       onClick={() => {
         axios
           .post('/api/restaurants/recommend/delete', {
-            address: props.markers[
-              props.markers.length - 1
-            ].infoContent.props.children.slice(0, 13)
+            address:
+              props.markers[props.markers.length - 1].infoContent.props
+                .children[13]
           })
           .catch(console.log)
       }}
@@ -143,6 +152,7 @@ class SearchBoxExample extends Component {
     this._map = map
     axios.get('/api/restaurants').then(restaurants => {
       const data = restaurants.data
+      console.log(data)
       const stateArray = data.map(place => ({
         position: {
           lat: place.restaurant.position[0],
@@ -185,10 +195,13 @@ class SearchBoxExample extends Component {
               )}
             </div>
             <b>Recommended By</b>
-            <br />
-            Name: {place.restaurant.users[0].name}
-            <br />
-            Cohort: {place.restaurant.users[0].cohort}
+            {place.restaurant.users.map(place =>
+              <div>
+                Name: {place.name}
+                <br />
+                Cohort: {place.cohort}
+              </div>
+            )}
           </div>
         )
       }))
@@ -256,6 +269,16 @@ class SearchBoxExample extends Component {
     let open
     if (checkopen) open = places[0].opening_hours.weekday_text.map(str => str)
     else open = ['No information available.']
+    axios
+      .post('/api/restaurants/recommend', {
+        name: places[0].name,
+        address: places[0].formatted_address,
+        phone: places[0].international_phone_number,
+        website: places[0].website,
+        position: [markers[0].position.lat(), markers[0].position.lng()],
+        open_times: open
+      })
+      .catch(console.log)
 
     const mapCenter =
       markers.length > 0 ? markers[0].position : this.state.center

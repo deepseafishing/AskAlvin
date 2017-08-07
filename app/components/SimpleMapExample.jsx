@@ -55,7 +55,7 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
           position={marker.position}
           key={index}
           onClick={() => props.onMarkerClicker(marker)}
-          onMarke
+          icon={'http://maps.google.com/mapfiles/ms/icons/green-dot.png'}
         >
           {marker.showInfo &&
             <InfoWindow onCloseClick={() => props.onMarkerClose(marker)}>
@@ -67,7 +67,8 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
       )}
     <div id="status-board" className="dropSheet">
       name add button
-      <Button floating small className="red" waves="light" icon="add" />
+      <Button floating className="blue" waves="light" icon="add" />
+      <Button floating className="red" waves="light" icon="remove" />
     </div>
   </GoogleMap>
 )
@@ -91,8 +92,6 @@ class SearchBoxExample extends Component {
     this._map = map
     axios.get('api/users/me/recommended/').then(restaurants => {
       const data = restaurants.data.restaurants
-      console.log('restaurants', restaurants)
-      console.log(data)
       const stateArray = data.map(el => ({
         position: {
           lat: el.position[0],
@@ -210,7 +209,6 @@ class SearchBoxExample extends Component {
   }
 
   handleMarkerClicker = targetMarker => {
-    console.log('markerClicker', targetMarker)
     let setInfo
     if (targetMarker.showInfo) setInfo = false
     else setInfo = true
@@ -229,7 +227,6 @@ class SearchBoxExample extends Component {
 
   handleMarkerClose = targetMarker => {
     const temp = targetMarker.infoContent[2].props.children[1]
-    console.log(temp, typeof temp)
     axios
       .post('/api/restaurants/recommend/delete', {
         address: temp

@@ -65,11 +65,29 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
             </InfoWindow>}
         </Marker>
       )}
+    {console.log(
+      props.currentMarker[0] &&
+        props.currentMarker[0].infoContent.props.children.slice(0, 13)
+    )}
+    {props.currentMarker.length !== 0 &&
+      props.currentMarker.map((marker, index) =>
+        <Marker
+          position={marker.position}
+          key={index}
+          onClick={() => props.onMarkerClicker(marker)}
+          icon={marker.color}
+        >
+          {marker.showInfo &&
+            <InfoWindow onCloseClick={() => marker.handler(marker)}>
+              <div>
+                {marker.infoContent}
+              </div>
+            </InfoWindow>}
+        </Marker>
+      )}
     <div id="status-board" className="dropSheet">
-      {props.markers[props.markers.length - 1] &&
-        props.markers[
-          props.markers.length - 1
-        ].infoContent.props.children.slice(0, 13)}
+      {props.currentMarker[0] &&
+        props.currentMarker[0].infoContent.props.children.slice(0, 14)}
       <form>
         <label>Review</label>
         <textarea
@@ -78,12 +96,29 @@ const SearchBoxExampleGoogleMap = withGoogleMap(props =>
         />
       </form>
     </div>
-    <Button floating className="blue add-button" waves="light" icon="add" />
+    <Button
+      floating
+      className="blue add-button"
+      waves="light"
+      icon="add"
+      onClick={() => {
+        axios.pos()
+      }}
+    />
     <Button
       floating
       className="red remove-button"
       waves="light"
       icon="remove"
+      onClick={() => {
+        axios
+          .post('/api/restaurants/recommend/delete', {
+            address: props.markers[
+              props.markers.length - 1
+            ].infoContent.props.children.slice(0, 13)
+          })
+          .catch(console.log)
+      }}
     />
   </GoogleMap>
 )
@@ -101,7 +136,7 @@ class SearchBoxExample extends Component {
       lng: -73.9841667
     },
     markers: [],
-    currentMarker: {}
+    currentMarker: []
   }
 
   handleMapMounted = map => {
@@ -215,29 +250,19 @@ class SearchBoxExample extends Component {
       ),
       showInfo: false,
       handler: this.handleOwnMarkerClose,
-      color: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+      color: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
     }))
 
     let open
     if (checkopen) open = places[0].opening_hours.weekday_text.map(str => str)
     else open = ['No information available.']
-    axios
-      .post('/api/restaurants/recommend', {
-        name: places[0].name,
-        address: places[0].formatted_address,
-        phone: places[0].international_phone_number,
-        website: places[0].website,
-        position: [markers[0].position.lat(), markers[0].position.lng()],
-        open_times: open
-      })
-      .catch(console.log)
 
     const mapCenter =
       markers.length > 0 ? markers[0].position : this.state.center
 
     this.setState({
       center: mapCenter,
-      markers: [...this.state.markers, ...markers]
+      currentMarker: [...markers]
     })
   }
 
@@ -301,6 +326,7 @@ class SearchBoxExample extends Component {
         onPlacesChanged={this.handlePlacesChanged}
         markers={this.state.markers}
         onMarkerClicker={this.handleMarkerClicker}
+        currentMarker={this.state.currentMarker}
       />
     )
   }

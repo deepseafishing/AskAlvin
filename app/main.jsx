@@ -45,7 +45,8 @@ const ExampleApp = connect(({
     <div>
       <NavBar />
       <Switch>
-        <Route exact
+        <Route
+          exact
           path="/"
           render={props =>
             user ? <SimpleMapExample {...props} /> : <Home {...props} />}

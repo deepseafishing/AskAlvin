@@ -28,18 +28,20 @@ class Home extends React.Component {
               Alvin for restuarant. <br />
               <br />
               <br />
-              WHAATTT? YOU'RE NOT FULLSTACK ALUMNI YET?
+              WHAATTT? <br />YOU'RE NOT FULLSTACK ALUMNI YET?
               <br />
-              Then consider joining FullStack Academy at here =>
+              Then consider joining FullStack Academy at here =><br />
               <a target="_blank" href="https://www.fullstackacademy.com/">
                 FullStack Academy
               </a>
-            </h5>
-            <h4 className="grey-text text-darken-3 lighten-3">
+              <br />
+              <br />
+              <br />
               Sorry, Nimit.. We couldn't find a black & white photo of you.
-              <br /> The Deal is always open for us if you're interested. <br />contact
-              Stanley at 1706-NY-FSA Campus.
-            </h4>
+              <br />Currently, we're looking for someone rich enough to back us
+              for our server fees. <br />contact Stanley at 1706-NY-FSA Campus
+              if you're interested.
+            </h5>
           </div>
         </div>
         <div className="parallax-container second-parallax">

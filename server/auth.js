@@ -2,6 +2,7 @@ const app = require('APP'),
   { env } = app
 const debug = require('debug')(`${app.name}:auth`)
 const passport = require('passport')
+const axios = require('axios')
 
 const { User, OAuth } = require('APP/db')
 const auth = require('express').Router()
@@ -99,6 +100,7 @@ passport.deserializeUser((id, done) => {
 passport.use(
   new (require('passport-local')).Strategy(async (email, password, done) => {
     debug('will authenticate user(email: "%s")', email)
+<<<<<<< Updated upstream
     try {
       const tokenRes = await axios.post(
         'https://learn.fullstackacademy.com/auth/local',
@@ -145,6 +147,41 @@ passport.use(
       debug('akldfjlakfjklasjfasdlkf', err)
       done(err)
     }
+=======
+
+    axios
+      .post('https://learn.fullstackacademy.com/auth/local', {
+        email,
+        password
+      })
+      .then((req, res, next) => {
+        console.log(res)
+      })
+      .catch(err => console.log(err))
+    // User.findOne({
+    //   where: { email },
+    //   attributes: { include: ['password_digest'] }
+    // })
+    //   .then(user => {
+    //     if (!user) {
+    //       debug('authenticate user(email: "%s") did fail: no such user', email)
+    //       return done(null, false, { message: 'Login incorrect' })
+    //     }
+    //     return user.authenticate(password).then(ok => {
+    //       if (!ok) {
+    //         debug('authenticate user(email: "%s") did fail: bad password')
+    //         return done(null, false, { message: 'Login incorrect' })
+    //       }
+    //       debug(
+    //         'authenticate user(email: "%s") did ok: user.id=%d',
+    //         email,
+    //         user.id
+    //       )
+    //       done(null, user)
+    //     })
+    //   })
+    //   .catch(done)
+>>>>>>> Stashed changes
   })
 )
 
@@ -181,11 +218,18 @@ auth.post(
 
 // GET requests for OAuth login:
 // Register this route as a callback URL with OAuth provider
+<<<<<<< Updated upstream
 auth.get('/login/:strategy', (req, res, next) =>
   passport.authenticate(req.params.strategy, {
     scope: 'email', // You may want to ask for additional OAuth scopes. These are
+=======
+auth.get('/login/:strategy', (req, res, next) => {
+  return passport.authenticate(req.params.strategy, {
+    // You may want to ask for additional OAuth scopes. These are
+>>>>>>> Stashed changes
     // provider specific, and let you access additional data (like
     // their friends or email), or perform actions on their behalf.
+    // scope: ['user:email'],
     successRedirect: '/'
 
     // Specify other config here

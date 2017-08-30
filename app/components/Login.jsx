@@ -48,14 +48,14 @@ export default function Login({
               </Input>
             </Row>
             <Row>
-              <Col offset="s2 m1 l3" s={12} m={8} l={10} className="blue-text">
+              <Col offset="s2 m1" s={12} m={8} l={12} className="blue-text">
                 <LoaderButton
                   type="submit"
                   waves="light"
                   className="blue white-text"
                   disabled={!validateInput}
                   isLoading={isLoading}
-                  text="Login"
+                  text="Login with FullStack"
                   loadingText="Logging in..."
                 />
               </Col>

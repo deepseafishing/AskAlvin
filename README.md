@@ -1,6 +1,8 @@
 # Ask Alvin
 Inspired by Alvin and his incredible abilities for recommending great places to eat around New York City,
-Stanley and I decided to work on this project during the 4 day.
+Stanley and I decided to work on this project during the 4 day. 
+
+Video: https://www.youtube.com/watch?v=Hkn6ScliFfI
 
 ### These are what I want to yeild from doing this project.
 
@@ -10,10 +12,6 @@ Stanley and I decided to work on this project during the 4 day.
 - [ ] Better Lunch at FullStack Academy.
 - [ ] Better MealPal experience
 - [ ] Help the following Cohort people who are new in town.
-
-### User Experience
--
-
 
 ### These are features I think will make this project a little bit greater.
 

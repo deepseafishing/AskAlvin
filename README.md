@@ -3,6 +3,7 @@ Inspired by Alvin and his incredible abilities for recommending great places to 
 Stanley and I decided to work on this project during the 4 day. 
 
 Video: https://www.youtube.com/watch?v=Hkn6ScliFfI
+![image](https://user-images.githubusercontent.com/6688549/90830297-62b99200-e37c-11ea-9bf7-f8ccf1cd89fc.png)
 
 ### These are what I want to yeild from doing this project.
 
